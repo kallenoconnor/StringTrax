@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Trax Homepage</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <header>
+        <div id="head-nav">
+        <h1>Stringtrax.com</h1>
+        <nav>
+            <ul>
+                <li>Home</li>
+                <li>Media</li>
+                <li>About</li>
+                <li>Contact</li>
+            </ul>
+        </nav>
+        </div>
+    </header>
+    <main id="Homepage">
+        <section id="Welcome">
+            <div id="transbox">
+                    <h2 data-anim>String<br/>Trax</h2>
+                    <h3 data-anim>Freelance Recording Services</h3>
+            </div>
+        </section>
+        <section id="Contact">
+            <div id="contact-text">
+                <h2 data-anim>Contact</h2>
+                <p>Offering professional violin and vocal tracks for recordings and other projects. 
+                Other strings available upon request. Please&nbsp;contact&nbsp;for&nbsp;a&nbsp;quote.</p>
+                <a href="mailto:info@stringtrax.com">info@stringtrax.com</a>
+            </div>
+            <img id="contact-accent" src="/Microphone.jpg" alt="Recording Studio" />
+        </section>
+    </main>
+    <footer>
+        stringtrax.com
+    </footer>
+     <script>
+let observer = new IntersectionObserver((entries, observer)=>
+{
+    entries.forEach(e=>{
+        console.log(e.isIntersecting, e.target);
+        if(e.isIntersecting)
+        {
+            e.target.setAttribute("data-anim", "on");
+        }
+        
+    });
+}
+, {
+  root: null,
+  rootMargin: "20px",
+  threshold: 1.0,
+});
+document.querySelectorAll("[data-anim]").forEach(t=>observer.observe(t));
+
+    </script>
+</body>
+</html>
