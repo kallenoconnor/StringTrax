@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>String Trax Homepage</title>
-    <link rel="stylesheet" href="/Users/koconnor/String_Trax/Home_Page/styles.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet">
@@ -20,6 +20,13 @@
     <header>
         <div id="head-nav">
             <h1>Stringtrax.com</h1>
+            <div class="mobile-nav">
+            <input class="checkbox" type="checkbox" name="" id="" />
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
             <nav>
                 <ul>
                     <li>Home</li>
@@ -28,7 +35,9 @@
                     <li>Contact</li>
                 </ul>
             </nav>
+            </div>
         </div>
+    </div>
     </header>
     <main id="Homepage">
         <section id="Welcome">
@@ -44,7 +53,7 @@
                     Other strings available upon request. Please&nbsp;contact&nbsp;for&nbsp;a&nbsp;quote.</p>
                 <a href="mailto:info@stringtrax.com">info@stringtrax.com</a>
             </div>
-            <img id="contact-accent" src="/Users/koconnor/String_Trax/Home_Page/Scroll.JPG" alt="Recording Studio" />
+            <img id="contact-accent" src="Microphone.jpg" alt="Recording Studio" />
         </section>
     </main>
     <footer>
@@ -66,6 +75,8 @@
                 threshold: 1.0,
             });
         document.querySelectorAll("[data-anim]").forEach(t => observer.observe(t));
+        
+
 
     </script>
 </body>

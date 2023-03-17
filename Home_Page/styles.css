@@ -60,7 +60,7 @@ header h1 {
 }
 
 #Welcome {
-    background-image:url("/Users/koconnor/String_Trax/Home_Page/Scroll.JPG");
+    background-image:url("Scroll.jpg");
     background-position: center;
     background-size: cover;
     max-width: 100%;
@@ -75,6 +75,10 @@ header h1 {
     background-color: rgba(255, 255, 255, 0.371);
     width: 40%;
     
+}
+
+.mobile-nav ul {
+    transition: none;
 }
 
 
@@ -144,6 +148,7 @@ footer {
     font-size:x-large
 }
 
+
 @media(max-width:1200px)
 {
     #Contact h2 {
@@ -160,7 +165,30 @@ footer {
     }
 }
 
-@media(max-width: 500px) {
+input[type='checkbox'] {
+    display: none;
+  }
+
+
+@media(max-width: 690px) {
+    
+    
+    h1 {
+        padding-top: 10px;
+    }
+
+    header {
+        position: relative;
+        height: 80px;
+        z-index: 100;
+        
+    }
+
+    header h1 {
+        height: 100px;
+        font-size: 30px;
+    }
+
 
     #transbox{
         margin: 0;
@@ -200,4 +228,72 @@ footer {
         text-align: center;
 
     }
+
+    .hamburger-lines, input[type='checkbox'] {
+        display: block;
+        height: 26px;
+        width: 34px;
+        position: absolute;
+        top: 18px;
+        right: 30px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      input[type='checkbox'] {
+        display: block;
+        z-index: 3;
+        opacity: 0;
+      }
+
+     
+      .hamburger-lines .line {
+        display: block;
+        height: 2px;
+        width: 100%;
+        border-radius: 15px;
+        background: #0e2431;
+        transform-origin: left top;
+        transition: all 0.4s;
+      }
+
+      .mobile-nav ul {
+        position: fixed;
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        transform: translateX(150%);
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        top: 0;
+        margin: 0;
+        border: none;
+        transition: transform 0.5s ease-in-out;
+        
+      }
+      
+      .mobile-nav li {
+        margin-bottom: 1.2rem;
+        font-size: 1.5rem;
+      }
+      input[type='checkbox']:checked ~ nav ul {
+        transform: translateX(0);
+        
+      }
+      
+      input[type="checkbox"]:checked ~ .hamburger-lines .line1 {
+        transform: rotate(45deg);
+      }
+      
+      input[type="checkbox"]:checked ~ .hamburger-lines .line2 {
+        transform: scaleY(0);
+      }
+      
+      input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
+        transform: rotate(-45deg);
+      }
+      
 }
