@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>String Trax Homepage</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet">
@@ -42,18 +42,18 @@
     <main id="Homepage">
         <section id="Welcome">
             <div id="transbox">
-                <h2 data-anim>String <br />Trax</h2>
-                <h3 data-anim>Freelance Recording Services</h3>
+                <span data-anim><h2>String <br />Trax</h2></span>
+                <span data-anim><h3>Freelance Recording Services</h3></span>
             </div>
         </section>
         <section id="Contact">
             <div id="contact-text">
-                <h2 data-anim>Contact</h2>
+                <span data-anim><h2>Contact</h2></span>
                 <p>Offering professional violin and vocal tracks for recordings and other projects.
                     Other strings available upon request. Please&nbsp;contact&nbsp;for&nbsp;a&nbsp;quote.</p>
                 <a href="mailto:info@stringtrax.com">info@stringtrax.com</a>
             </div>
-            <img id="contact-accent" src="Microphone.jpg" alt="Recording Studio" />
+            <img id="contact-accent" src="../Microphone.jpg" alt="Recording Studio" />
         </section>
     </main>
     <footer>
@@ -71,8 +71,8 @@
         }
             , {
                 root: null,
-                rootMargin: "20px",
-                threshold: 1.0,
+                rootMargin: '0px',
+                threshold: 1,
             });
         document.querySelectorAll("[data-anim]").forEach(t => observer.observe(t));
         

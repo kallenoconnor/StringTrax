@@ -1,3 +1,5 @@
+/*All Pages*/
+
 * {
     font-weight:100;
     
@@ -13,19 +15,7 @@ body {
     margin: 0;
 }
 
-
-[data-anim]
-{
-    position:relative;
-    top: 200px;
-    opacity: 0;
-    transition:all 1.1s;
-}
-[data-anim='on']
-{
-    top: 0px;
-    opacity: 1;
-}
+/*Nav Elements (all pages)*/
 
 nav ul {
     list-style: none;
@@ -37,14 +27,15 @@ nav ul {
     padding-top: 15px;
     font-size: small;
     font-family: 'Open Sans', sans-serif;
+    left: 0;
+    position: relative;
 }
 
 
-h1 {
-    padding-top: 30px;
-    text-transform: uppercase;
-    text-align: center;
+.mobile-nav ul {
+    transition: none;
 }
+
 
 header {
     max-width: 600px;
@@ -56,11 +47,40 @@ header {
 header h1 {
     font-size: 40px;
     line-height: 1.35em;
-    color:rgb(52, 52, 52)
+    color:rgb(52, 52, 52);
+    padding-top: 30px;
+    text-transform: uppercase;
+    text-align: center;
 }
 
+/* footer (all pages)*/
+footer {
+    text-align: center;
+    padding: 50px;
+    font-size:x-large
+}
+
+
+/* Homepage elements*/
+
+/*animation*/
+[data-anim] > *
+{   
+    position:relative;
+    transform: translateY(200px);
+    opacity: 0;
+    transition:all 1.1s;
+}
+[data-anim='on'] > *
+{   
+    transform:translateY(0px);
+    opacity: 1;
+}
+
+/*design*/
+
 #Welcome {
-    background-image:url("Scroll.jpg");
+    background-image:url("/Scroll.jpg");
     background-position: center;
     background-size: cover;
     max-width: 100%;
@@ -76,11 +96,6 @@ header h1 {
     width: 40%;
     
 }
-
-.mobile-nav ul {
-    transition: none;
-}
-
 
 #Welcome h2 {
    padding-top: 30px;
@@ -142,13 +157,25 @@ header h1 {
     object-fit: cover;
 }
 
-footer {
-    text-align: center;
-    padding: 50px;
-    font-size:x-large
+/*About Elements*/
+#about-info {
+  background-image:url("/concertbg.jpeg");
+    /* background-position: center; */
+    background-size: cover;
+    max-width: 100%;
+    height: 840px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    
 }
 
+#testimonials {
+    height: 996px;
+}
 
+/*Meida Queries*/
+/*tablet size*/
 @media(max-width:1200px)
 {
     #Contact h2 {
@@ -169,7 +196,7 @@ input[type='checkbox'] {
     display: none;
   }
 
-
+/*phone size*/
 @media(max-width: 690px) {
     
     
@@ -264,11 +291,12 @@ input[type='checkbox'] {
         background-color: white;
         height: 100%;
         width: 100%;
-        transform: translateX(150%);
+        transform: translateX(0%);
         display: flex;
         flex-direction: column;
         text-align: center;
         top: 0;
+        left: 100%;
         margin: 0;
         border: none;
         transition: transform 0.5s ease-in-out;
@@ -280,7 +308,7 @@ input[type='checkbox'] {
         font-size: 1.5rem;
       }
       input[type='checkbox']:checked ~ nav ul {
-        transform: translateX(0);
+        transform: translateX(-100%);
         
       }
       
