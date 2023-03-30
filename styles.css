@@ -160,18 +160,63 @@ footer {
 /*About Elements*/
 #about-info {
   background-image:url("/concertbg.jpeg");
-    /* background-position: center; */
+    background-position: 15% 35%;
     background-size: cover;
     max-width: 100%;
     height: 840px;
     color: white;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 3000px rgba(88, 83, 88, 0.267) inset;
     
 }
 
+#div-text {
+    width: 900px;
+    margin: auto;
+}
+
+#div-text h2 {
+ 
+   font-size: 88px;
+   line-height: 1.2em;
+   text-transform: uppercase;
+   margin: 0;
+  
+}
+
+#div-text h3 {
+    font-size: 28px;
+}
+
+#div-text p {
+    font-size: 22px;
+}
+
 #testimonials {
+   
     height: 996px;
+    background-color: rgb(247, 247, 247);
+}
+
+#testimonial-text {
+    width: 900px;
+    margin: auto;
+}
+
+#testimonial-text h2 {
+    font-size: 88px;
+    color: rgb(179,138,76);
+    text-transform: uppercase;
+    padding-top: 80px;
+    padding-bottom:0;
+    margin-bottom: 0;
+}
+
+#testimonial-text p {
+    font-size: 22px;
+    /* font-weight: 100; */
 }
 
 /*Meida Queries*/
