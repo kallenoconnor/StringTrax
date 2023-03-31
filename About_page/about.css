@@ -1,0 +1,56 @@
+@import "../main.css";
+
+#about-info {
+  
+    background-image:url("/concertbg.jpeg");
+    background-position: 15% 35%;
+    background-size: cover;
+    max-width: 100%;
+    min-height: 840px;
+    box-sizing: border-box;
+    padding:  80px 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 3000px rgba(88, 83, 88, 0.267) inset;
+    
+}
+
+#testimonials {
+   
+    min-height: 996px;
+    background-color: rgb(247, 247, 247);
+    padding: 20px;
+}
+
+#testimonial-text {
+    max-width: 900px;
+    margin: auto;
+}
+
+#testimonial-text h2 {
+    font-size: 88px;
+    color: rgb(179,138,76);
+    text-transform: uppercase;
+    padding-top: 80px;
+    padding-bottom:0;
+    margin: 0;
+}
+
+#testimonial-text p {
+    font-size: 22px;
+
+}
+
+
+
+@media(max-width: 690px) {
+    #about-info {
+        padding-top: 400px;
+        background-position: center top;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: black;
+    }
+}

@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>String Trax Homepage</title>
-    <link rel="stylesheet" href="../styles.css">
+    <script src="../script.js" defer> </script>
+    <link rel="stylesheet" href="home.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet">
@@ -59,26 +60,7 @@
     <footer>
         stringtrax.com
     </footer>
-    <script>
-        let observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(e => {
-                console.log(e.isIntersecting, e.target);
-                if (e.isIntersecting) {
-                    e.target.setAttribute("data-anim", "on");
-                }
-
-            });
-        }
-            , {
-                root: null,
-                rootMargin: '0px',
-                threshold: 1,
-            });
-        document.querySelectorAll("[data-anim]").forEach(t => observer.observe(t));
-        
-
-
-    </script>
+   
 </body>
 
 </html>
