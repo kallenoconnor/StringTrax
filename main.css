@@ -23,6 +23,11 @@ nav ul {
     position: relative;
 }
 
+nav a {
+  text-decoration: none;
+  color: black !important;
+}
+
 
 .mobile-nav ul {
     transition: none;
@@ -54,6 +59,9 @@ footer {
 
 
 /*animation*/
+
+
+
 [data-anim] > *
 {   
     position:relative;
@@ -68,30 +76,7 @@ footer {
 }
 
 
-#div-text {
-    max-width: 900px;
-    margin: auto;
-}
 
-#div-text h2 {
- 
-   font-size: 88px;
-   line-height: 1.2em;
-   text-transform: uppercase;
-   margin: 0;
-   opacity: 0.8;
-  
-}
-
-#div-text h3 {
-    font-size: 28px;
-    opacity: 0.8;
-}
-
-#div-text p {
-    font-size: 22px;
-    opacity: 0.8;
-}
 input[type='checkbox'] {
   display: none;
 }
@@ -105,6 +90,22 @@ input[type='checkbox'] {
 
 
 @media(max-width: 690px) {    
+  h1 {
+    padding-top: 10px;
+}
+
+header {
+    position: relative;
+    height: 80px;
+    z-index: 100;
+    
+}
+
+header h1 {
+    height: 100px;
+    font-size: 30px;
+}
+
 
     .hamburger-lines, input[type='checkbox'] {
         display: block;

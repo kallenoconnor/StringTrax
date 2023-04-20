@@ -1,0 +1,8 @@
+@import "../main.css";
+
+img {
+object-fit: cover;
+display: block;
+width: 100%;
+height: 80vh;
+}

@@ -17,6 +17,31 @@
     
 }
 
+#div-text {
+    max-width: 900px;
+    margin: auto;
+}
+
+#div-text h2 {
+ 
+   font-size: 80px;
+   line-height: 1.2em;
+   text-transform: uppercase;
+   margin: 0;
+   opacity: 0.8;
+  
+}
+
+#div-text h3 {
+    font-size: 28px;
+    opacity: 0.8;
+}
+
+#div-text p {
+    font-size: 22px;
+    opacity: 0.8;
+}
+
 #testimonials {
    
     min-height: 996px;
@@ -30,7 +55,7 @@
 }
 
 #testimonial-text h2 {
-    font-size: 88px;
+    font-size: 80px;
     color: rgb(179,138,76);
     text-transform: uppercase;
     padding-top: 80px;
@@ -47,10 +72,16 @@
 
 @media(max-width: 690px) {
     #about-info {
-        padding-top: 400px;
+        padding-top: 300px;
         background-position: center top;
         background-size: contain;
         background-repeat: no-repeat;
         background-color: black;
     }
+
+    #testimonial-text h2, #about-info h2 {
+        font-size: 50px;
+    }
+
+
 }

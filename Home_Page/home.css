@@ -100,22 +100,7 @@
 
     
     @media(max-width:690px) {
-    h1 {
-        padding-top: 10px;
-    }
-
-    header {
-        position: relative;
-        height: 80px;
-        z-index: 100;
-        
-    }
-
-    header h1 {
-        height: 100px;
-        font-size: 30px;
-    }
-
+   
 
     #transbox{
         margin: 0;
