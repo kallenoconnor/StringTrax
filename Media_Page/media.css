@@ -1,6 +1,6 @@
 @import "../main.css";
 
-#audio-player-container button {
+.audio-player-container button {
     background: transparent;
     cursor: pointer;
     outline: none;
@@ -8,7 +8,7 @@
     height: 40px; */
     float: left;
 }
-#audio-player-container {
+.audio-player-container {
   --seek-before-width: 0%;
     --volume-before-width: 100%;
     --buffered-width: 0%;
@@ -19,25 +19,25 @@
     height: 132px;
     background: #fff;
 }
-/* #audio-player-container::before {
+/* .audio-player-container::before {
     position: absolute;
     content: '';
     width: calc(100% + 4px);
     height: calc(100% + 4px);
     left: -2px;
     top: -2px;
-    background: linear-gradient(to left, #007db5, #ff8a00);
+    background: linear-gradient(to left, .007db5, .ff8a00);
     z-index: -1;
 } */
 
-#play-icon {
+.play-icon {
     margin: 20px 2.5% 10px 2.5%;
     border: 1px solid black;
     border-radius: 100px;
     padding: 15px
 }
 path {
-    stroke: #0e0f0f;
+    stroke: .0e0f0f;
 }
 .time {
     display: inline-block;
@@ -56,24 +56,24 @@ output {
     float: left;
     clear: left;
 }
-#volume-slider {
+.volume-slider {
     margin: 10px 2.5%;
     width: 58%;
     
 }
-#volume-slider::-webkit-slider-runnable-track {
+.volume-slider::-webkit-slider-runnable-track {
     background: black;
 }
-#volume-slider::-moz-range-track {
+.volume-slider::-moz-range-track {
     background: black;
 }
-#volume-slider::-ms-fill-upper {
+.volume-slider::-ms-fill-upper {
     background: black;
 }
-#volume-slider::before {
+.volume-slider::before {
     width: var(--volume-before-width);
 }
-#mute-icon {
+.mute-icon {
     margin: 0 2.5%;
     border: none;
 }

@@ -1,11 +1,16 @@
 /** Implementation of the presentation of the audio player */
 import lottieWeb from 'https://cdn.skypack.dev/lottie-web';
 
-const playIconContainer = document.getElementById('play-icon');
-const audioPlayerContainer = document.getElementById('audio-player-container');
-const seekSlider = document.getElementById('seek-slider');
-const volumeSlider = document.getElementById('volume-slider');
-const muteIconContainer = document.getElementById('mute-icon');
+function initPlayer(rootElement) {
+const playIconContainer = rootElement.querySelector('.play-icon');
+const audioPlayerContainer = rootElement;
+const seekSlider = rootElement.querySelector('.seek-slider');
+const volumeSlider = rootElement.querySelector('.volume-slider');
+const muteIconContainer = rootElement.querySelector('.mute-icon');
+const audio = rootElement.querySelector('audio');
+const durationContainer = rootElement.querySelector('.duration');
+const currentTimeContainer = rootElement.querySelector('.current-time');
+const outputContainer = rootElement.querySelector('.volume-output');
 let playState = 'play';
 let muteState = 'unmute';
 
@@ -55,16 +60,12 @@ muteIconContainer.addEventListener('click', () => {
     }
 });
 
-const showRangeProgress = (rangeInput) => {
-    if(rangeInput === seekSlider) audioPlayerContainer.style.setProperty('--seek-before-width', rangeInput.value / rangeInput.max * 100 + '%');
-    else audioPlayerContainer.style.setProperty('--volume-before-width', rangeInput.value / rangeInput.max * 100 + '%');
-}
 
 seekSlider.addEventListener('input', (e) => {
-    showRangeProgress(e.target);
+    audioPlayerContainer.style.setProperty('--seek-before-width', e.target.value / e.target.max * 100 + '%');
 });
 volumeSlider.addEventListener('input', (e) => {
-    showRangeProgress(e.target);
+    audioPlayerContainer.style.setProperty('--volume-before-width', e.target.value / e.target.max * 100 + '%');
 });
 
 
@@ -73,10 +74,7 @@ volumeSlider.addEventListener('input', (e) => {
 
 /** Implementation of the functionality of the audio player */
 
-const audio = document.querySelector('audio');
-const durationContainer = document.getElementById('duration');
-const currentTimeContainer = document.getElementById('current-time');
-const outputContainer = document.getElementById('volume-output');
+
 let raf = null;
 
 const calculateTime = (secs) => {
@@ -140,3 +138,7 @@ volumeSlider.addEventListener('input', (e) => {
     outputContainer.innerText = value;
     audio.volume = value / 100;
 });
+}
+
+
+initPlayer(document.querySelector('.audio-player-container'));
