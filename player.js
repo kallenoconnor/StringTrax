@@ -5,14 +5,10 @@ function initPlayer(rootElement) {
 const playIconContainer = rootElement.querySelector('.play-icon');
 const audioPlayerContainer = rootElement;
 const seekSlider = rootElement.querySelector('.seek-slider');
-const volumeSlider = rootElement.querySelector('.volume-slider');
-const muteIconContainer = rootElement.querySelector('.mute-icon');
 const audio = rootElement.querySelector('audio');
 const durationContainer = rootElement.querySelector('.duration');
 const currentTimeContainer = rootElement.querySelector('.current-time');
-const outputContainer = rootElement.querySelector('.volume-output');
 let playState = 'play';
-let muteState = 'unmute';
 
 const playAnimation = lottieWeb.loadAnimation({
   container: playIconContainer,
@@ -23,14 +19,6 @@ const playAnimation = lottieWeb.loadAnimation({
   name: "Play Animation",
 });
 
-const muteAnimation = lottieWeb.loadAnimation({
-    container: muteIconContainer,
-    path: 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/mute/mute.json',
-    renderer: 'svg',
-    loop: false,
-    autoplay: false,
-    name: "Mute Animation",
-});
 
 playAnimation.goToAndStop(14, true);
 
@@ -48,26 +36,11 @@ playIconContainer.addEventListener('click', () => {
     }
 });
 
-muteIconContainer.addEventListener('click', () => {
-    if(muteState === 'unmute') {
-        muteAnimation.playSegments([0, 15], true);
-        audio.muted = true;
-        muteState = 'mute';
-    } else {
-        muteAnimation.playSegments([15, 25], true);
-        audio.muted = false;
-        muteState = 'unmute';
-    }
-});
 
 
 seekSlider.addEventListener('input', (e) => {
     audioPlayerContainer.style.setProperty('--seek-before-width', e.target.value / e.target.max * 100 + '%');
 });
-volumeSlider.addEventListener('input', (e) => {
-    audioPlayerContainer.style.setProperty('--volume-before-width', e.target.value / e.target.max * 100 + '%');
-});
-
 
 
 
@@ -132,12 +105,6 @@ seekSlider.addEventListener('change', () => {
     }
 });
 
-volumeSlider.addEventListener('input', (e) => {
-    const value = e.target.value;
-
-    outputContainer.innerText = value;
-    audio.volume = value / 100;
-});
 }
 
 

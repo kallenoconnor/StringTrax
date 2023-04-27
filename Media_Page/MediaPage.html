@@ -41,13 +41,18 @@
     <main>
         <div class="audio-player-container">
             <audio src="./Schindler's List.mp3" preload="metadata" loop></audio>
+            <img src="./Schindler's List Cover Art.png">
             <button class="play-icon"></button>
-            <span class="current-time" class="time">0:00</span>
-            <input type="range" class="seek-slider" max="100" value="0">
-            <span class="duration" class="time">0:00</span>
-            <output class="volume-output">100</output>
-            <input type="range" class="volume-slider" max="100" value="100">
-            <button class="mute-icon"></button>
+            <div id="text">
+                <h2>Kallen O'Connor</h2>
+                <h2>Schindler's List</h2>
+            </div>
+            <div id="controls">
+                <span class="current-time" class="time">0:00</span>
+                <input type="range" class="seek-slider" max="100" value="0">
+                <span class="duration" class="time">0:00</span>
+            </div>
+            <div id="links">Placeholder for links</div>
           </div>
         <!-- <audio controls="controls"><source src="./Schindler's List.mp3" type="audio/mpeg"></audio>
         <audio controls="controls"><source src="./Trace My Troubles Clip.mp3" type="audio/mpeg"></audio>

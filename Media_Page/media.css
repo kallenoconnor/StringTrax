@@ -1,11 +1,13 @@
 @import "../main.css";
 
+img {
+    grid-area: img;
+    width: 170px;
+}
 .audio-player-container button {
     background: transparent;
     cursor: pointer;
     outline: none;
-    /* width: 40px;
-    height: 40px; */
     float: left;
 }
 .audio-player-container {
@@ -18,26 +20,46 @@
     max-width: 500px;
     height: 132px;
     background: #fff;
+    display: grid;
+    grid-template-columns: 170px 85px 420px 120px;
+    grid-template-rows: 85px 85px;
+    grid-template-areas: 
+    "img icon text links"
+    "img current-time slider duration";
+    gap: 20px;
+    
+    
 }
-/* .audio-player-container::before {
+.audio-player-container::before {
     position: absolute;
     content: '';
     width: calc(100% + 4px);
     height: calc(100% + 4px);
     left: -2px;
     top: -2px;
-    background: linear-gradient(to left, .007db5, .ff8a00);
+    background: linear-gradient(to left, .007db5, #ff8a00);
     z-index: -1;
-} */
+}
 
 .play-icon {
-    margin: 20px 2.5% 10px 2.5%;
     border: 1px solid black;
     border-radius: 100px;
-    padding: 15px
+    padding: 15px;
+    grid-area: icon;
+
 }
 path {
     stroke: .0e0f0f;
+}
+
+h2 {
+    margin: 5px;
+}
+
+#controls {
+    display: flex;
+    width: 1000px;
+    align-items: center;
 }
 .time {
     display: inline-block;
@@ -45,9 +67,30 @@ path {
     text-align: center;
     font-size: 20px;
     margin: 28.5px 0 18.5px 0;
-    float: left;
 }
-output {
+
+.current-time {
+    grid-area: current-time;
+}
+
+.duration {
+    grid-area: duration;
+}
+
+.seek-slider {
+    grid-area: slider;
+}
+
+#links {
+    grid-area: links;
+}
+
+#text {
+    grid-area: text;
+}
+
+
+/* output {
     display: inline-block;
     width: 32px;
     text-align: center;
@@ -55,7 +98,7 @@ output {
     margin: 10px 2.5% 0 5%;
     float: left;
     clear: left;
-}
+} */
 .volume-slider {
     margin: 10px 2.5%;
     width: 58%;
@@ -73,14 +116,11 @@ output {
 .volume-slider::before {
     width: var(--volume-before-width);
 }
-.mute-icon {
-    margin: 0 2.5%;
-    border: none;
-}
+
 input[type="range"] {
     position: relative;
     -webkit-appearance: none;
-    width: 48%;
+    width: 50%;
     margin: 0;
     padding: 0;
     height: 19px;
@@ -127,7 +167,7 @@ input[type="range"]::-moz-range-track {
     background: linear-gradient(to right, rgba(0, 125, 181, 0.6) var(--buffered-width), rgba(0, 125, 181, 0.2) var(--buffered-width));
 }
 input[type="range"]::-moz-range-progress {
-    background-color: #007db5;
+    background-color: .007db5;
 }
 input[type="range"]::-moz-focus-outer {
     border: 0;
