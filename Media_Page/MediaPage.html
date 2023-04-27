@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media</title>
     <script src="../script.js" defer> </script>
+    <script src="../player.js" type="module"> </script>
     <link rel="stylesheet" href="media.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,10 +39,19 @@
     </div>
     </header>
     <main>
-        <h1>UNDER CONSTRUCTION</h1>
-        <audio controls="controls"><source src="./Schindler's List.mp3" type="audio/mpeg"></audio>
+        <div id="audio-player-container">
+            <audio src="./Schindler's List.mp3" preload="metadata" loop></audio>
+            <button id="play-icon"></button>
+            <span id="current-time" class="time">0:00</span>
+            <input type="range" id="seek-slider" max="100" value="0">
+            <span id="duration" class="time">0:00</span>
+            <output id="volume-output">100</output>
+            <input type="range" id="volume-slider" max="100" value="100">
+            <button id="mute-icon"></button>
+          </div>
+        <!-- <audio controls="controls"><source src="./Schindler's List.mp3" type="audio/mpeg"></audio>
         <audio controls="controls"><source src="./Trace My Troubles Clip.mp3" type="audio/mpeg"></audio>
-        <audio controls="controls"><source src="./Waste My Time clip.mp3" type="audio/mpeg"></audio>
+        <audio controls="controls"><source src="./Waste My Time clip.mp3" type="audio/mpeg"></audio> -->
 
     </main>
 
