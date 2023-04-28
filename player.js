@@ -52,89 +52,99 @@ function Cycle(inHandler) {
     return { Play, Stop }; 
 };
 
-/** @type {(inSeconds:number)=>string} */
-const calculateTime = (inSeconds) => {
-    const minutes = Math.floor(inSeconds / 60);
-    const seconds = Math.floor(inSeconds % 60);
-    return `${minutes}:${seconds<10?"0":""}${seconds}`;
-};
+const Util =
+{
+    /** @type {(inSeconds:number|string)=>string} */
+    FormatTime(inSeconds)
+    {
+        inSeconds = typeof inSeconds == "number" ? inSeconds : parseFloat(inSeconds);
+        const minutes = Math.floor(inSeconds / 60);
+        const seconds = Math.floor(inSeconds % 60);
+        return `${minutes}:${seconds<10?"0":""}${seconds}`;
+    },
+    /** @type {(inPart:number|string, inWhole:number|string)=>string} */
+    FormatPercent(inPart, inWhole)
+    {
+        inPart  = typeof inPart  == "number" ? inPart  : parseFloat(inPart);
+        inWhole = typeof inWhole == "number" ? inWhole : parseFloat(inWhole);
+        return `${(inPart/inWhole) * 100}%`;
+    }   
+}
 
 /** @type {(rootElement:HTMLElement)=>void} */
 function initPlayer(rootElement) {
 
-    /** @type {HTMLAudioElement|null} */ const domAudio = rootElement.querySelector('audio');
-    /** @type {HTMLElement|null}      */ const domPlay = rootElement.querySelector('.play-icon');
-    /** @type {HTMLInputElement|null}      */ const domSeek = rootElement.querySelector('.seek-slider');
-    /** @type {HTMLElement|null}      */ const domTime = rootElement.querySelector('.current-time');
-    /** @type {HTMLElement|null}      */ const domLeng = rootElement.querySelector('.duration');
+    /** @type {null|HTMLAudioElement} */ const domSong = rootElement.querySelector('audio');
+    /** @type {null|HTMLInputElement} */ const domSeek = rootElement.querySelector('.seek-slider');
+    /** @type {null|HTMLElement}      */ const domPlay = rootElement.querySelector('.play-icon');
+    /** @type {null|HTMLElement}      */ const domTime = rootElement.querySelector('.current-time');
+    /** @type {null|HTMLElement}      */ const domSize = rootElement.querySelector('.duration');
     
-    if(!domAudio || !domPlay || !domSeek || !domTime || !domLeng )
-    {
-        return;
-    }
+    if(!domSong || !domPlay || !domSeek || !domTime || !domSize ){ return; }
 
-    const anim = Animation(domPlay);
-
-    const cycle = Cycle(()=>
+    const loop = Cycle(()=>
     {
-        const time = Math.floor(domAudio.currentTime);
+        const time = Math.floor(domSong.currentTime);
         domSeek.value = time.toString();
-        domTime.textContent = calculateTime(time);
-        rootElement.style.setProperty('--seek-before-width', `${time / parseInt(domSeek.max) * 100}%`);
+        domTime.textContent = Util.FormatTime(time);
+        rootElement.style.setProperty('--seek-before-width', Util.FormatPercent(time, domSeek.max));
     });
 
     const updateFileSize =()=>
     {
-        if(domAudio.buffered.length)
+        if(domSong.buffered.length)
         {
-            const bufferedAmount = Math.floor(domAudio.buffered.end(domAudio.buffered.length - 1));
-            rootElement.style.setProperty('--buffered-width', `${(bufferedAmount / parseInt(domSeek.max)) * 100}%`);
+            const bufferedAmount = Math.floor(domSong.buffered.end(domSong.buffered.length - 1));
+            rootElement.style.setProperty('--buffered-width', Util.FormatPercent(bufferedAmount, domSeek.max));
         }
-        domLeng.textContent = calculateTime(domAudio.duration);
-        domSeek.max = Math.floor(domAudio.duration).toString();
+        domSize.textContent = Util.FormatTime(domSong.duration);
+        domSeek.max = Math.floor(domSong.duration).toString();
     };
 
+    // state stuff
     let Playing = false;
     const Play =()=>
     {
-        domAudio.play();
+        domSong.play();
         anim.Play();
-        cycle.Play();
+        loop.Play();
         Playing = true;
     };
     const Stop =()=>
     {
-        domAudio.pause();
+        domSong.pause();
         anim.Stop();
-        cycle.Stop();
+        loop.Stop();
         Playing = false;
     };
-    const Toggle =()=>
-    {
-        Playing ? Stop() : Play();
-    };
 
-    anim.Init();
-    domPlay.addEventListener('click', Toggle);
-    updateFileSize();
-    domAudio.addEventListener('loadedmetadata', updateFileSize);
-    domAudio.addEventListener('progress', updateFileSize);
-    
     // while the slide moves
     domSeek.addEventListener('input', (e) =>
     {
         const target = /** @type {HTMLInputElement} */(e.target);
-        rootElement.style.setProperty('--seek-before-width', parseInt(target.value) / parseInt(target.max) * 100 + '%');
-        domTime.textContent = calculateTime(parseInt(domSeek.value));
+        rootElement.style.setProperty('--seek-before-width', Util.FormatPercent(target.value, target.max));
+        domTime.textContent = Util.FormatTime(domSeek.value);
         Playing && Stop();
     });
 
     // when slider interaction has stopped
-    domSeek.addEventListener('change', () => {
-        domAudio.currentTime = parseInt(domSeek.value);
+    domSeek.addEventListener('change', () =>
+    {
+        domSong.currentTime = parseInt(domSeek.value);
         Play();
     });
 
+    // when the play/pause button is pressed
+    domPlay.addEventListener('click', ()=> Playing ? Stop() : Play());
+
+    // periodically update loaded/duration numbers
+    domSong.addEventListener('loadedmetadata', updateFileSize);
+    domSong.addEventListener('progress', updateFileSize);
+    updateFileSize();
+    
+    // setup the play button animation
+    const anim = Animation(domPlay);
+    anim.Init();
 }
 
 document.querySelectorAll('.audio-player-container').forEach((player)=>
