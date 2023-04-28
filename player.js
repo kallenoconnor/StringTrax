@@ -3,7 +3,7 @@
 import lottieWeb from 'https://cdn.skypack.dev/lottie-web';
 
 /** @typedef {()=>void} AnimationAction */
-/** @typedef {{ShowInit:AnimationAction, ShowPlay:AnimationAction, ShowStop:AnimationAction}} AnimationControls */
+/** @typedef {{Init:AnimationAction, Play:AnimationAction, Stop:AnimationAction}} AnimationControls */
 /** @typedef {(inElement:HTMLElement)=>AnimationControls} AnimationConstructor */
 
 /** @type {AnimationConstructor} */
@@ -19,13 +19,13 @@ function Animation(inElement)
     });
     
     return {
-        ShowInit: ()=> Animation.goToAndStop(14, true),
-        ShowPlay: ()=> Animation.playSegments([14, 27], true),
-        ShowStop: ()=> Animation.playSegments([0, 14], true)
+        Init: ()=> Animation.goToAndStop(14, true),
+        Play: ()=> Animation.playSegments([14, 27], true),
+        Stop: ()=> Animation.playSegments([0, 14], true)
     };
 }
 
-/** @typedef {{Loop:()=>void, Stop:()=>void }} CyclerControls */
+/** @typedef {{Play:()=>void, Stop:()=>void }} CyclerControls */
 /** @typedef {(inHandler:()=>void)=>CyclerControls} CycleConstructor */
 /** @type {CycleConstructor} */
 function Cycle(inHandler) {
@@ -37,7 +37,7 @@ function Cycle(inHandler) {
         inHandler();
         Live = requestAnimationFrame(_run);
     };
-    const Loop =()=>
+    const Play =()=>
     {
         if(Live){ return; }
         Live = requestAnimationFrame(_run);
@@ -49,58 +49,63 @@ function Cycle(inHandler) {
         Live = false;
     };
 
-    return { Loop, Stop }; 
+    return { Play, Stop }; 
 };
 
-const calculateTime = (secs) => {
-    const minutes = Math.floor(secs / 60);
-    const seconds = Math.floor(secs % 60);
+/** @type {(inSeconds:number)=>string} */
+const calculateTime = (inSeconds) => {
+    const minutes = Math.floor(inSeconds / 60);
+    const seconds = Math.floor(inSeconds % 60);
     return `${minutes}:${seconds<10?"0":""}${seconds}`;
 };
 
-
+/** @type {(rootElement:HTMLElement)=>void} */
 function initPlayer(rootElement) {
 
-    const playIconContainer = rootElement.querySelector('.play-icon');
-    const audioPlayerContainer = rootElement;
-    const seekSlider = rootElement.querySelector('.seek-slider');
-    /** @type {HTMLAudioElement} */
-    const audio = rootElement.querySelector('audio');
-    const durationContainer = rootElement.querySelector('.duration');
-    const currentTimeContainer = rootElement.querySelector('.current-time');
+    /** @type {HTMLAudioElement|null} */ const domAudio = rootElement.querySelector('audio');
+    /** @type {HTMLElement|null}      */ const domPlay = rootElement.querySelector('.play-icon');
+    /** @type {HTMLInputElement|null}      */ const domSeek = rootElement.querySelector('.seek-slider');
+    /** @type {HTMLElement|null}      */ const domTime = rootElement.querySelector('.current-time');
+    /** @type {HTMLElement|null}      */ const domLeng = rootElement.querySelector('.duration');
+    
+    if(!domAudio || !domPlay || !domSeek || !domTime || !domLeng )
+    {
+        return;
+    }
 
-    const anim = Animation(playIconContainer);
+    const anim = Animation(domPlay);
 
     const cycle = Cycle(()=>
     {
-        seekSlider.value = Math.floor(audio.currentTime);
-        currentTimeContainer.textContent = calculateTime(seekSlider.value);
-        audioPlayerContainer.style.setProperty('--seek-before-width', `${seekSlider.value / seekSlider.max * 100}%`);
+        const time = Math.floor(domAudio.currentTime);
+        domSeek.value = time.toString();
+        domTime.textContent = calculateTime(time);
+        rootElement.style.setProperty('--seek-before-width', `${time / parseInt(domSeek.max) * 100}%`);
     });
 
     const updateFileSize =()=>
     {
-        if(audio.buffered.length)
+        if(domAudio.buffered.length)
         {
-            const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
-            audioPlayerContainer.style.setProperty('--buffered-width', `${(bufferedAmount / seekSlider.max) * 100}%`);
+            const bufferedAmount = Math.floor(domAudio.buffered.end(domAudio.buffered.length - 1));
+            rootElement.style.setProperty('--buffered-width', `${(bufferedAmount / parseInt(domSeek.max)) * 100}%`);
         }
-        durationContainer.textContent = calculateTime(audio.duration);
-        seekSlider.max = Math.floor(audio.duration);
+        domLeng.textContent = calculateTime(domAudio.duration);
+        domSeek.max = Math.floor(domAudio.duration).toString();
     };
 
     let Playing = false;
     const Play =()=>
     {
-        audio.play();
-        anim.ShowPlay();
-        cycle.Loop();
+        domAudio.play();
+        anim.Play();
+        cycle.Play();
         Playing = true;
     };
     const Stop =()=>
     {
-        audio.pause();
-        anim.ShowStop();
+        domAudio.pause();
+        anim.Stop();
         cycle.Stop();
         Playing = false;
     };
@@ -109,26 +114,30 @@ function initPlayer(rootElement) {
         Playing ? Stop() : Play();
     };
 
-    anim.ShowInit();
-    playIconContainer.addEventListener('click', Toggle);
+    anim.Init();
+    domPlay.addEventListener('click', Toggle);
     updateFileSize();
-    audio.addEventListener('loadedmetadata', updateFileSize);
-    audio.addEventListener('progress', updateFileSize);
+    domAudio.addEventListener('loadedmetadata', updateFileSize);
+    domAudio.addEventListener('progress', updateFileSize);
     
     // while the slide moves
-    seekSlider.addEventListener('input', (e) => {
-        audioPlayerContainer.style.setProperty('--seek-before-width', e.target.value / e.target.max * 100 + '%');
-        currentTimeContainer.textContent = calculateTime(seekSlider.value);
+    domSeek.addEventListener('input', (e) =>
+    {
+        const target = /** @type {HTMLInputElement} */(e.target);
+        rootElement.style.setProperty('--seek-before-width', parseInt(target.value) / parseInt(target.max) * 100 + '%');
+        domTime.textContent = calculateTime(parseInt(domSeek.value));
         Playing && Stop();
     });
 
     // when slider interaction has stopped
-    seekSlider.addEventListener('change', () => {
-        audio.currentTime = seekSlider.value;
+    domSeek.addEventListener('change', () => {
+        domAudio.currentTime = parseInt(domSeek.value);
         Play();
     });
 
 }
 
-
-initPlayer(document.querySelector('.audio-player-container'));
+document.querySelectorAll('.audio-player-container').forEach((player)=>
+{
+    initPlayer( /** @type {HTMLElement}*/(player) );
+})
