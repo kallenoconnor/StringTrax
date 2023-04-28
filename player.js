@@ -1,3 +1,4 @@
+// @ts-check
 /** Implementation of the presentation of the audio player */
 import lottieWeb from 'https://cdn.skypack.dev/lottie-web';
 
@@ -25,6 +26,7 @@ function Animation(inElement)
 }
 
 function initPlayer(rootElement) {
+
     const playIconContainer = rootElement.querySelector('.play-icon');
     const audioPlayerContainer = rootElement;
     const seekSlider = rootElement.querySelector('.seek-slider');
@@ -33,27 +35,18 @@ function initPlayer(rootElement) {
     const currentTimeContainer = rootElement.querySelector('.current-time');
     let playState = 'play';
 
-const playAnimation = lottieWeb.loadAnimation({
-  container: playIconContainer,
-  path: 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/pause/pause.json',
-  renderer: 'svg',
-  loop: false,
-  autoplay: false,
-  name: "Play Animation",
-});
-
-
-playAnimation.goToAndStop(14, true);
+    const anim = Animation(playIconContainer);
+    anim.ShowInit();
 
     playIconContainer.addEventListener('click', () => {
         if(playState === 'play') {
             audio.play();
-        playAnimation.playSegments([14, 27], true);
+            anim.ShowPlay();
             requestAnimationFrame(whilePlaying);
             playState = 'pause';
         } else {
             audio.pause();
-        playAnimation.playSegments([0, 14], true);
+            anim.ShowStop();
             cancelAnimationFrame(raf);
             playState = 'play';
         }
