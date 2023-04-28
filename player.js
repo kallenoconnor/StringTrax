@@ -1,111 +1,153 @@
+// @ts-check
 /** Implementation of the presentation of the audio player */
 import lottieWeb from 'https://cdn.skypack.dev/lottie-web';
 
-function initPlayer(rootElement) {
-const playIconContainer = rootElement.querySelector('.play-icon');
-const audioPlayerContainer = rootElement;
-const seekSlider = rootElement.querySelector('.seek-slider');
-const audio = rootElement.querySelector('audio');
-const durationContainer = rootElement.querySelector('.duration');
-const currentTimeContainer = rootElement.querySelector('.current-time');
-let playState = 'play';
+/** @typedef {()=>void} AnimationAction */
+/** @typedef {{Init:AnimationAction, Play:AnimationAction, Stop:AnimationAction}} AnimationControls */
+/** @typedef {(inElement:HTMLElement)=>AnimationControls} AnimationConstructor */
 
-const playAnimation = lottieWeb.loadAnimation({
-  container: playIconContainer,
-  path: 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/pause/pause.json',
-  renderer: 'svg',
-  loop: false,
-  autoplay: false,
-  name: "Play Animation",
-});
-
-
-playAnimation.goToAndStop(14, true);
-
-playIconContainer.addEventListener('click', () => {
-    if(playState === 'play') {
-        audio.play();
-        playAnimation.playSegments([14, 27], true);
-        requestAnimationFrame(whilePlaying);
-        playState = 'pause';
-    } else {
-        audio.pause();
-        playAnimation.playSegments([0, 14], true);
-        cancelAnimationFrame(raf);
-        playState = 'play';
-    }
-});
-
-
-
-seekSlider.addEventListener('input', (e) => {
-    audioPlayerContainer.style.setProperty('--seek-before-width', e.target.value / e.target.max * 100 + '%');
-});
-
-
-
-
-/** Implementation of the functionality of the audio player */
-
-
-let raf = null;
-
-const calculateTime = (secs) => {
-    const minutes = Math.floor(secs / 60);
-    const seconds = Math.floor(secs % 60);
-    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-    return `${minutes}:${returnedSeconds}`;
-}
-
-const displayDuration = () => {
-    durationContainer.textContent = calculateTime(audio.duration);
-}
-
-const setSliderMax = () => {
-    seekSlider.max = Math.floor(audio.duration);
-}
-
-const displayBufferedAmount = () => {
-    const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
-    audioPlayerContainer.style.setProperty('--buffered-width', `${(bufferedAmount / seekSlider.max) * 100}%`);
-}
-
-const whilePlaying = () => {
-    seekSlider.value = Math.floor(audio.currentTime);
-    currentTimeContainer.textContent = calculateTime(seekSlider.value);
-    audioPlayerContainer.style.setProperty('--seek-before-width', `${seekSlider.value / seekSlider.max * 100}%`);
-    raf = requestAnimationFrame(whilePlaying);
-}
-
-if (audio.readyState > 0) {
-    displayDuration();
-    setSliderMax();
-    displayBufferedAmount();
-} else {
-    audio.addEventListener('loadedmetadata', () => {
-        displayDuration();
-        setSliderMax();
-        displayBufferedAmount();
+/** @type {AnimationConstructor} */
+function Animation(inElement)
+{
+    const Animation = lottieWeb.loadAnimation({
+        container: inElement,
+        renderer: 'svg',
+        autoplay: false,
+        loop: false,
+        name: "Play Animation",
+        path: 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/pause/pause.json'
     });
+    
+    return {
+        Init: ()=> Animation.goToAndStop(14, true),
+        Play: ()=> Animation.playSegments([14, 27], true),
+        Stop: ()=> Animation.playSegments([0, 14], true)
+    };
 }
 
-audio.addEventListener('progress', displayBufferedAmount);
+/** @typedef {{Play:()=>void, Stop:()=>void }} CyclerControls */
+/** @typedef {(inHandler:()=>void)=>CyclerControls} CycleConstructor */
+/** @type {CycleConstructor} */
+function Cycle(inHandler) {
 
-seekSlider.addEventListener('input', () => {
-    currentTimeContainer.textContent = calculateTime(seekSlider.value);
-    if(!audio.paused) {
-        cancelAnimationFrame(raf);
-    }
-});
+    /** @type {false|number} */
+    let Live = false;
+    const _run= ()=>
+    {
+        inHandler();
+        Live = requestAnimationFrame(_run);
+    };
+    const Play =()=>
+    {
+        if(Live){ return; }
+        Live = requestAnimationFrame(_run);
+    };
+    const Stop =()=>
+    {
+        if(Live === false){ return; }
+        cancelAnimationFrame(Live);
+        Live = false;
+    };
 
-seekSlider.addEventListener('change', () => {
-    audio.currentTime = seekSlider.value;
-    if(!audio.paused) {
-        requestAnimationFrame(whilePlaying);
-    }
-});
+    return { Play, Stop }; 
+};
 
+const Util =
+{
+    /** @type {(inSeconds:number|string)=>string} */
+    FormatTime(inSeconds)
+    {
+        inSeconds = typeof inSeconds == "number" ? inSeconds : parseFloat(inSeconds);
+        const minutes = Math.floor(inSeconds / 60);
+        const seconds = Math.floor(inSeconds % 60);
+        return `${minutes}:${seconds<10?"0":""}${seconds}`;
+    },
+    /** @type {(inPart:number|string, inWhole:number|string)=>string} */
+    FormatPercent(inPart, inWhole)
+    {
+        inPart  = typeof inPart  == "number" ? inPart  : parseFloat(inPart);
+        inWhole = typeof inWhole == "number" ? inWhole : parseFloat(inWhole);
+        return `${(inPart/inWhole) * 100}%`;
+    }   
 }
 
+/** @type {(rootElement:HTMLElement)=>void} */
+function initPlayer(rootElement) {
 
-initPlayer(document.querySelector('.audio-player-container'));
+    /** @type {null|HTMLAudioElement} */ const domSong = rootElement.querySelector('audio');
+    /** @type {null|HTMLInputElement} */ const domSeek = rootElement.querySelector('.seek-slider');
+    /** @type {null|HTMLElement}      */ const domPlay = rootElement.querySelector('.play-icon');
+    /** @type {null|HTMLElement}      */ const domTime = rootElement.querySelector('.current-time');
+    /** @type {null|HTMLElement}      */ const domSize = rootElement.querySelector('.duration');
+    
+    if(!domSong || !domPlay || !domSeek || !domTime || !domSize ){ return; }
+
+    const loop = Cycle(()=>
+    {
+        const time = Math.floor(domSong.currentTime);
+        domSeek.value = time.toString();
+        domTime.textContent = Util.FormatTime(time);
+        rootElement.style.setProperty('--seek-before-width', Util.FormatPercent(time, domSeek.max));
+    });
+
+    const updateFileSize =()=>
+    {
+        if(domSong.buffered.length)
+        {
+            const bufferedAmount = Math.floor(domSong.buffered.end(domSong.buffered.length - 1));
+            rootElement.style.setProperty('--buffered-width', Util.FormatPercent(bufferedAmount, domSeek.max));
+        }
+        domSize.textContent = Util.FormatTime(domSong.duration);
+        domSeek.max = Math.floor(domSong.duration).toString();
+    };
+
+    // state stuff
+    let Playing = false;
+    const Play =()=>
+    {
+        domSong.play();
+        anim.Play();
+        loop.Play();
+        Playing = true;
+    };
+    const Stop =()=>
+    {
+        domSong.pause();
+        anim.Stop();
+        loop.Stop();
+        Playing = false;
+    };
+
+    // while the slide moves
+    domSeek.addEventListener('input', (e) =>
+    {
+        const target = /** @type {HTMLInputElement} */(e.target);
+        rootElement.style.setProperty('--seek-before-width', Util.FormatPercent(target.value, target.max));
+        domTime.textContent = Util.FormatTime(domSeek.value);
+        Playing && Stop();
+    });
+
+    // when slider interaction has stopped
+    domSeek.addEventListener('change', () =>
+    {
+        domSong.currentTime = parseInt(domSeek.value);
+        Play();
+    });
+
+    // when the play/pause button is pressed
+    domPlay.addEventListener('click', ()=> Playing ? Stop() : Play());
+
+    // periodically update loaded/duration numbers
+    domSong.addEventListener('loadedmetadata', updateFileSize);
+    domSong.addEventListener('progress', updateFileSize);
+    updateFileSize();
+    
+    // setup the play button animation
+    const anim = Animation(domPlay);
+    anim.Init();
+}
+
+document.querySelectorAll('.audio-player-container').forEach((player)=>
+{
+    initPlayer( /** @type {HTMLElement}*/(player) );
+})
