@@ -1,6 +1,6 @@
-const videoThumbnails = document.querySelectorAll(".video-gallery .all-videos .thumbnail");
-const videoPlayer = document.querySelector(".video-gallery .featured-video iframe");
-const videoTitle = document.querySelector(".video-gallery .video-title");
+const videoThumbnails = document.querySelectorAll(".thumbnail");
+const videoPlayer = document.querySelector("iframe");
+const videoTitle = document.querySelector(".video-title");
 
 const showVideo = (videoId, title) => {
     let videoUrl = `https://www.youtube.com/embed/${videoId}?rel=0`;
