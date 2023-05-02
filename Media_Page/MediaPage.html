@@ -7,6 +7,7 @@
     <title>Media</title>
     <script src="../script.js" defer> </script>
     <script src="../player.js" type="module"> </script>
+    <script src="../videoplayer.js" type="module"> </script>
     <link rel="stylesheet" href="media.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,6 +107,45 @@
                 target="_blank"><img id="apple" src="./AppleMusicLogo.png"></a>
             </div>
           </div>
+        </div>
+        <div class="video-gallery-container">
+            <div class="video-gallery">
+                <div class="featured-video">
+                    <iframe width="800" height="500" src="https://www.youtube.com/embed/Foo7PwkjR5I?rel=0" 
+                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
+                    encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <h3 class="video-title">Hark the Herald Angels Sing</h3>
+                </div>
+
+                <div class="all-videos">
+                    <div class="video">
+                        <img class="thumbnail" src="./harkthumbnail.jpeg" 
+                        data-id="Foo7PwkjR5I" data-title="Hard the Herald Angels Sing" />
+                        <div class="play-button">
+                            <img src="./Playbutton.png" alt="">
+                        </div>
+                        <p>Hark the Herald Angels Sing</p>
+                    </div>
+                    
+                    <div class="video">
+                        <img class="thumbnail" src="./childthumbnail.jpeg" 
+                        data-id="6MrF5GOdEOE" data-title="What Child Is This"/>
+                        <div class="play-button">
+                            <img src="./Playbutton.png" alt="">
+                        </div>
+                        <p>What Child is This?</p>
+                    </div>
+                    <div class="video">
+                        <img class="thumbnail" src="./mountainthumbnail.jpeg" 
+                        data-id="8c3-ie20j2E" data-title="Go Tell It On the Mountain"/>
+                        <div class="play-button">
+                            <img src="./Playbutton.png" alt="">
+                        </div>
+                        <p>Go Tell It On The Mountain</p>
+                    </div>
+                </div>
+            </div>
+            
         </div>
 
     </main>

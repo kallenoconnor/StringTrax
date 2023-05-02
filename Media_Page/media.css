@@ -189,3 +189,68 @@ input[type="range"]:active::-ms-thumb {
     transform: scale(1.2);
     background: black;
 }
+
+.video-gallery-container {
+    width: 1200px;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+.video-gallery-container,
+.video-gallery-container * {
+    box-sizing: border-box;
+}
+
+.video-gallery-container .video-gallery {
+    display: flex;
+    background: rgb(247, 247, 247);
+    padding: 16px;
+    padding-top: 24px;
+    gap: 24px;
+    color: black;
+    justify-content: center;
+}
+
+.video-gallery h3.video-title {
+    line-height: 1.6;
+    font-size: 25px;
+
+}
+
+.video-gallery .thumbnail {
+    height: 160px;
+    cursor: pointer;
+}
+
+.video-gallery .video {
+    position: relative;
+}
+
+.video-gallery .video:hover .play-button {
+    opacity: 1;
+
+}
+.video-gallery .play-button {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 400ms ease;
+}
+
+.video-gallery .video .play-button img {
+    height: 50px;
+    width: 50px;
+}
+
+.video-gallery .all-videos {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.video p {
+    margin: 0 0 5px 0;
+}
