@@ -131,7 +131,6 @@ function initPlayer(rootElement) {
     domSeek.addEventListener('change', () =>
     {
         domSong.currentTime = parseInt(domSeek.value);
-        Play();
     });
 
     // when the play/pause button is pressed
