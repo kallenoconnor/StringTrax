@@ -1,3 +1,5 @@
+---
+---
 /*All Pages*/
 
 
@@ -9,7 +11,9 @@ body {
 
 /*Nav Elements (all pages)*/
 
-nav ul {
+nav
+{
+  ul {
     list-style: none;
     display: flex;
     justify-content: center;
@@ -21,12 +25,15 @@ nav ul {
     font-family: 'Open Sans', sans-serif;
     left: 0;
     position: relative;
+  }
+
+  a {
+    text-decoration: none;
+    color: black !important;
+  }
 }
 
-nav a {
-  text-decoration: none;
-  color: black !important;
-}
+
 
 
 .mobile-nav ul {
