@@ -9,13 +9,23 @@
     display: flex;
     justify-content: end;
 
+    text-align: center;
+
+    #transbox
+    {
+        margin:80px; 
+        padding:30px;
+        background-color: rgba(255, 255, 255, 0.371);
+        width: 40%;
+    }
+
     h2 {
         padding-top: 30px;
         font-size: 75px;
         line-height: 1.2em;
         position: relative;
         color:rgb(52, 52, 52);
-        text-align: center;
+
         text-transform: uppercase;
         margin-bottom: 20px;
      
@@ -24,20 +34,13 @@
      h3 {
          margin-top: 0;
          font-size: 35px;
-         text-align: center;
+         
          color:rgb(52, 52, 52)
      }
      
 
 }
 
-#transbox {
-    margin:80px; 
-    padding:30px;
-    background-color: rgba(255, 255, 255, 0.371);
-    width: 40%;
-    
-}
 
 #Contact {
     margin: auto;
@@ -68,10 +71,8 @@
     justify-content: center;
 }
 
-#contact-text a {
-   text-decoration: none;
+#contact-text a[href^='mailto:'] {
    color:black;
-
 }
 
 #contact-accent
