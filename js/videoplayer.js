@@ -3,7 +3,7 @@ const videoPlayer = document.querySelector("iframe");
 const videoTitle = document.querySelector(".video-title");
 
 const showVideo = (videoId, title) => {
-    let videoUrl = `https://www.youtube.com/embed/${videoId}?rel=0`;
+    let videoUrl = `https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`;
     videoPlayer.setAttribute("src", videoUrl);
     videoTitle.innerHTML = title;
 };

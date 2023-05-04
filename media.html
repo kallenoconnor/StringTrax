@@ -1,154 +1,86 @@
 ---
+title: "Media"
 sheet: "/css/media.css"
+
+audio:
+  - artist:  "Kallen O&apos;Connor"
+    track:   "Schindler&apos;s List"
+    spotify: "602fNu8uLA7DFX9ylVH0si"
+    youtube: "SMIg7QTq4-U"
+    apple:   "schindlers-list-feat-marshall-griffith-single/1564704068"
+    mp3:     "Schindler's List.mp3"
+    
+  - artist:  "Emily & Ivory"
+    track:   "I Waste My Time"
+    spotify: "0gm0wbBvS0SjmedJdqaxyX"
+    youtube: "IF7oamq4gEQ"
+    apple:   "i-waste-my-time/1538223130?i=1538223148"
+    mp3:     "Waste My Time clip.mp3"
+
+  - artist:  "Emily & Ivory"
+    track:   "Why Do I Trace My Troubles Back to You"
+    spotify: "38jm2hLV6jD3jXJMPpymIM"
+    youtube: "plQepYqPVV8"
+    apple:   "why-do-i-trace-my-troubles-back-to-you/1538223130?i=1538223144"
+    mp3:     "Trace My Troubles Clip.mp3"
+
+video:
+  "Foo7PwkjR5I": "Hark the Herald Angels Sing"
+  "6MrF5GOdEOE": "What Child is This?"
+  "8c3-ie20j2E": "Go Tell It On The Mountain"
+  "QRvTxrjvdFU": "O Come Come Emmanuel feat. Kallen O'Connor, Violin"
+  "hTCrP4PteVU": "O Come Come Emmanuel, Emily & Ivory"
+  "gvp4Ecdm1dE": "Parkside Church Easter Service - April 12, 2020"
+  "mtyD5Vtyq8s": "Strauss Violin Sonata"
+
 ---
 <main>
     <div id="audio">
-
-    <div class="audio-player-container">
-        <audio src="/mp3/Schindler's List.mp3" preload="metadata" loop></audio>
-        <img class="albumCover" src="/img/Schindler's List Cover Art.png">
-        <button class="play-icon"></button>
-        <div id="text">
-            <h2>Kallen O'Connor</h2>
-            <h2>Schindler's List</h2>
-        </div>
-        <span class="current-time time">0:00</span>
-        <input type="range" class="seek-slider" max="100" value="0">
-        <span class="duration time">0:00</span>
-        <div id="links">
-            <a href="https://open.spotify.com/track/602fNu8uLA7DFX9ylVH0si?si=809100c171c44f9c" target="_blank">
-                <img id="spotify" src="/img/spotifyLogo.png">
-            </a>
-            <a href="https://www.youtube.com/watch?v=SMIg7QTq4-U" target="_blank">
-                <img id="youtube" src="/img/YouTubeLogo.png">
-            </a>
-            <a href="https://music.apple.com/us/album/schindlers-list-feat-marshall-griffith-single/1564704068" target="_blank">
-                <img id="apple" src="/img/AppleMusicLogo.png">
-            </a>
-        </div>
+        {% for song in page.audio %}
+            <div class="audio-player-container">
+                <audio src="{{site.baseurl}}/mp3/{{song.mp3}}" preload="metadata" loop></audio>
+                <img class="albumCover" src="https://i.ytimg.com/vi/{{song.youtube}}/mqdefault.jpg">
+                <button class="play-icon"></button>
+                <div id="text">
+                    <h2>{{song.artist}}</h2>
+                    <h2><em>{{song.track}}</em></h2>
+                </div>
+                <span class="current-time time">0:00</span>
+                <input type="range" class="seek-slider" max="100" value="0">
+                <span class="duration time">0:00</span>
+                <div id="links">
+                    <a href="https://open.spotify.com/track/{{song.spotify}}"  target="_blank"><img id="spotify" src="{{site.baseurl}}/img/spotifyLogo.png"   ></a>
+                    <a href="https://www.youtube.com/watch?v={{song.youtube}}" target="_blank"><img id="youtube" src="{{site.baseurl}}/img/YouTubeLogo.png"   ></a>
+                    <a href="https://music.apple.com/us/album/{{song.apple}}"  target="_blank"><img id="apple"   src="{{site.baseurl}}/img/AppleMusicLogo.png"></a>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
-      <div class="audio-player-container">
-        <audio src="/mp3/Trace My Troubles Clip.mp3" preload="metadata" loop></audio>
-        <img class="albumCover" src="/img/Emily and Iovry Album Cover.jpg">
-        <button class="play-icon"></button>
-        <div id="text">
-            <h2>Emily & Ivory</h2>
-            <h2>Why Do I Trace My Troubles Back to You</h2>
-        </div>
-        
-            <span class="current-time time">0:00</span>
-            <input type="range" class="seek-slider" max="100" value="0">
-            <span class="duration time">0:00</span>
-       
-        <div id="links">
-            <a href="https://open.spotify.com/track/38jm2hLV6jD3jXJMPpymIM?si=58aec6819fab4676"
-            target="_blank"><img id="spotify" src="./spotifyLogo.png"></a>
-            <a href="https://www.youtube.com/watch?v=plQepYqPVV8" 
-            target="_blank"><img id="youtube" src="./YouTubeLogo.png"></a>
-            <a href="https://music.apple.com/us/album/why-do-i-trace-my-troubles-back-to-you/1538223130?i=1538223144"
-            target="_blank"><img id="apple" src="./AppleMusicLogo.png"></a>
-        </div>
-      </div>
-      <div class="audio-player-container">
-        <audio src="./Waste My Time clip.mp3" preload="metadata" loop></audio>
-        <img class="albumCover" src="./Emily and Iovry Album Cover.jpg">
-        <button class="play-icon"></button>
-        <div id="text">
-            <h2>Emily & Ivory</h2>
-            <h2>I Waste My Time</h2>
-        </div>
-        
-            <span class="current-time time">0:00</span>
-            <input type="range" class="seek-slider" max="100" value="0">
-            <span class="duration time">0:00</span>
-       
-        <div id="links">
-            <a href="https://open.spotify.com/track/0gm0wbBvS0SjmedJdqaxyX?si=94b5894df29c4fb4"
-            target="_blank"><img id="spotify" src="./spotifyLogo.png"></a>
-            <a href="https://www.youtube.com/watch?v=IF7oamq4gEQ&list=OLAK5uy_lUP_YjBEy_SxVq_7-vVCZhlyW_RloyrTc&index=9" 
-            target="_blank"><img id="youtube" src="./YouTubeLogo.png"></a>
-            <a href="https://music.apple.com/us/album/i-waste-my-time/1538223130?i=1538223148"
-            target="_blank"><img id="apple" src="./AppleMusicLogo.png"></a>
-        </div>
-      </div>
-    </div>
     <div id="video">
-    <div class="video-gallery-container">
-        <div id="frame-holder">
-            <iframe width="800" height="500" src="https://www.youtube.com/embed/Foo7PwkjR5I?rel=0" 
-            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
-            encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </div>
-        <h3 class="video-title">Hark the Herald Angels Sing</h3>
-            
+        <div class="video-gallery-container">
+            {% for YTID in page.video %}
+                {% if forloop.first %}
+                    <div id="frame-holder">
+                        <iframe src="https://www.youtube.com/embed/{{ YTID[0] }}?rel=0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <h3 class="video-title">{{ YTID[1] }}</h3>
+                    {% break %}
+                {% endif %}
+            {% endfor %}
             <div id="thumbs">
-                <div class="video">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/Foo7PwkjR5I/mqdefault.jpg" 
-                    data-id="Foo7PwkjR5I" data-title="Hard the Herald Angels Sing" />
-                    <div class="play-button">
-                        <img src="./Playbutton.png" alt="">
+                {% for YTID in page.video %}
+                    <div class="video">
+                        <img class="thumbnail" src="https://i.ytimg.com/vi/{{ YTID[0] }}/mqdefault.jpg" data-id="{{ YTID[0] }}" data-title="{{ YTID[1] }}" />
+                        <div class="play-button"><img src="{{site.baseurl}}/img/Playbutton.png" alt=""></div>
+                        <p>{{ YTID[1] }}</p>
                     </div>
-                    <p>Hark the Herald Angels Sing</p>
-                </div>
-                
-                <div class="video">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/6MrF5GOdEOE/mqdefault.jpg"
-                    data-id="6MrF5GOdEOE" data-title="What Child Is This"/>
-                    <div class="play-button">
-                        <img src="./Playbutton.png" alt="">
-                    </div>
-                    <p>What Child is This?</p>
-                </div>
-                <div class="video">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/8c3-ie20j2E/mqdefault.jpg"  
-                    data-id="8c3-ie20j2E" data-title="Go Tell It On the Mountain"/>
-                    <div class="play-button">
-                        <img src="./Playbutton.png" alt="">
-                    </div>
-                    <p>Go Tell It On The Mountain</p>
-                </div>
-                <div class="video">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/QRvTxrjvdFU/mqdefault.jpg" 
-                    data-id="QRvTxrjvdFU" data-title="O Come Come Emmanuel feat. Kallen O'Connor, Violin"/>
-                    <div class="play-button">
-                        <img src="./Playbutton.png" alt="">
-                    </div>
-                    <p>O Come Come Emmanuel feat. Kallen O'Connor, Violin</p>
-                </div>
-                <div class="video">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/hTCrP4PteVU/mqdefault.jpg"
-                    data-id="hTCrP4PteVU" data-title="O Come Come Emmanuel, Emily & Ivory"/>
-                    <div class="play-button">
-                        <img src="./Playbutton.png" alt="">
-                    </div>
-                    <p>O Come Come Emmanuel, Emily & Ivory</p>
-                </div>
-                <div class="video">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/gvp4Ecdm1dE/mqdefault.jpg" 
-                    data-id="gvp4Ecdm1dE" data-title="Parkside Church Easter Service - April 12, 2020"/>
-                    <div class="play-button">
-                        <img src="./Playbutton.png" alt="">
-                    </div>
-                    <p>Parkside Church Easter Service - April 12, 2020</p>
-                </div>
-                <div class="video">
-                    <img class="thumbnail" src="https://i.ytimg.com/vi/mtyD5Vtyq8s/mqdefault.jpg" 
-                    data-id="mtyD5Vtyq8s" data-title="Strauss Violin Sonata"/>
-                    <div class="play-button">
-                        <img src="./Playbutton.png" alt="">
-                    </div>
-                    <p>Strauss Violin Sonata</p>
-                </div>
-                
+                {% endfor %}
             </div>
-            
-            </div>
-
+        </div>
     </div>
-</div>
 
 </main>
 
-<script src="/js/player.js"></script>
-<script src="/js/videoplayer.js"></script>
+<script src="{{site.baseurl}}/js/player.js" type="module"></script>
+<script src="{{site.baseurl}}/js/videoplayer.js"></script>

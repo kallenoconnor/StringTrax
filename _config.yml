@@ -1,4 +1,5 @@
 layouts_dir: "_layouts"
+baseurl: "/StringTrax"
 defaults:
   -
     scope:
