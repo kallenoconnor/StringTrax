@@ -1,6 +1,7 @@
 ---
 ---
-#Welcome {
+#Welcome
+{
     background-image:url("{{site.baseurl}}/img/Scroll.jpg");
     background-position: center;
     background-size: cover;
@@ -10,6 +11,7 @@
     justify-content: end;
 
     text-align: center;
+    color: #4c3c32;
 
     #transbox
     {
@@ -24,7 +26,6 @@
         font-size: 75px;
         line-height: 1.2em;
         position: relative;
-        color:rgb(52, 52, 52);
 
         text-transform: uppercase;
         margin-bottom: 20px;
@@ -35,7 +36,6 @@
          margin-top: 0;
          font-size: 35px;
          
-         color:rgb(52, 52, 52)
      }
      
 
@@ -47,98 +47,97 @@
     display: flex;
     padding: 80px;
     padding-bottom: 20px;
+
+    h2 {
+        color: rgb(179,138,76);
+        font-size: 80px;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+        margin-top: 0;
+    }
     
-}
-
-#Contact h2 {
-    color: rgb(179,138,76);
-    font-size: 80px;
-    text-transform: uppercase;
-    margin-bottom: 40px;
-    margin-top: 0;
-}
-
-#contact-text {
-    box-sizing: border-box;
-    flex-basis: 45%;
-    background-color: rgb(247, 247, 247);
-    padding: 20px 100px 20px 100px;
-    font-size: larger;
-    text-decoration: none;
+    #contact-text {
+        box-sizing: border-box;
+        flex-basis: 45%;
+        background-color: rgb(247, 247, 247);
+        padding: 20px 100px 20px 100px;
+        font-size: larger;
+        text-decoration: none;
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#contact-text a[href^='mailto:'] {
-   color:black;
-}
-
-#contact-accent
-{
-    width: 55%;
-    object-fit: cover;
+        a[href^='mailto:'] {
+            color:black;
+        }
+    }
+    
+    #contact-accent
+    {
+        width: 55%;
+        object-fit: cover;
+    }
 }
 
 @media(max-width:1200px)
 {
-    #Contact h2 {
-        font-size: 50px;
-    }
     #Contact
     {
         flex-direction: column;
-    }
-    #contact-text { padding:30px 30px 50px 30px;}
-    #contact-accent
-    {
-        width:100%;
+
+        #contact-text { padding:30px 30px 50px 30px;}
+        #contact-accent
+        {
+            width:100%;
+        }
+        h2 {
+            font-size: 50px;
+        }
     }
 }
-
-
-
     
-    @media(max-width:690px) {
+@media(max-width:690px) {
    
+    #Welcome
+    {
+        height: 25em;
 
-    #transbox{
-        margin: 0;
-        padding: 0;
-        width: 100%;
+        #transbox
+        {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        h2 br {
+            display: none;
+        }
+
+        h2 {
+            font-size: 40px;
+            margin-top: 100px;
+        }
+
+        h3 {
+            font-size: 30px;
+            margin: 0;
+        }
     }
 
-    #Welcome {
-       height: 25em;
-    }
-
-    #Welcome h2 br {
-        display: none;
-    }
-
-    #Welcome h2 {
-        font-size: 40px;
-        margin-top: 100px;
-    }
-
-    #Welcome h3 {
-        font-size: 30px;
-        margin: 0;
-    }
 
     #Contact {
         padding: 0;
         margin: 0
+
+        h2  {
+            text-align: center;
+            margin: 0
+        }
+    
+        #contact-text {
+            text-align: center;
+        }
     }
 
-    #Contact h2  {
-        text-align: center;
-        margin: 0
-    }
-
-    #contact-text {
-        text-align: center;
-
-    }
 }
