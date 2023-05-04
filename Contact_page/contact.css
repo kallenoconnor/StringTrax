@@ -44,6 +44,7 @@ label {
 input[type="text"] {
     width:800px;
     padding: 15px 20px;
+    font-family:'Open Sans', sans-serif;
 }
 
 textarea {
