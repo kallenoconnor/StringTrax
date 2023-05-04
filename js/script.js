@@ -1,18 +1,10 @@
-let observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(e => {
-        console.log(e.isIntersecting, e.target);
-        if (e.isIntersecting) {
-            requestAnimationFrame( () => {
-                e.target.setAttribute("data-anim", "on");
-            })
-        }
+const observerCheckHit = (/**@type {IntersectionObserverEntry}*/element )=>
+{
+    if (element.isIntersecting)
+    {
+        requestAnimationFrame( ()=>element.target.setAttribute("data-anim", "on") );
+    }
+};
 
-    });
-}
-    , {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1,
-    });
-document.querySelectorAll("[data-anim]").forEach(t => observer.observe(t));
-
+const observer = new IntersectionObserver( (e)=>e.forEach(observerCheckHit), { root: null, rootMargin: '0px', threshold: 0.1 } );
+document.querySelectorAll("[data-anim]").forEach(anim=>observer.observe(anim));

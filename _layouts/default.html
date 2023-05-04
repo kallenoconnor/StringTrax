@@ -1,50 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{page.title}}</title>
-    <script src="{{site.baseurl}}/js/script.js" defer> </script>
-    <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
-    {% if page.sheet %}<link rel="stylesheet" href="{{site.baseurl}}{{page.sheet}}">{% endif %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-
-</head>
-
-<body>
-    <header>
-        <div id="head-nav">
-            <h1><a href="{{site.baseurl}}/">Stringtrax.com</a></h1>
-            <div class="mobile-nav">
-            <input class="checkbox" type="checkbox" name="" id="" />
-            <div class="hamburger-lines">
-                <span class="line line1"></span>
-                <span class="line line2"></span>
-                <span class="line line3"></span>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{page.title}}</title>
+        <script src="{{site.baseurl}}/js/script.js" defer> </script>
+        <link href="{{site.baseurl}}/css/main.css" rel="stylesheet">
+        {% if page.sheet %}<link href="{{site.baseurl}}{{page.sheet}}" rel="stylesheet">{% endif %}
+    </head>
+    <body>
+        <header>
+            <div id="head-nav">
+                <h1><a href="{{site.baseurl}}/">Stringtrax.com</a></h1>
+                <div class="mobile-nav">
+                    <input class="checkbox" type="checkbox" name="" id="" />
+                    <div class="hamburger-lines">
+                        <span class="line line1"></span>
+                        <span class="line line2"></span>
+                        <span class="line line3"></span>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="{{site.baseurl}}/">Home</a></li>
+                            <li><a href="{{site.baseurl}}/media">Media</a></li>
+                            <li><a href="{{site.baseurl}}/about">About</a></li>
+                            <li><a href="{{site.baseurl}}/contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="{{site.baseurl}}/">Home</a></li>
-                    <li><a href="{{site.baseurl}}/media">Media</a></li>
-                    <li><a href="{{site.baseurl}}/about">About</a></li>
-                    <li><a href="{{site.baseurl}}/contact">Contact</a></li>
-                </ul>
-            </nav>
-            </div>
-        </div>
-    </div>
-    </header>
-
-    {{content}}
-
-    <footer>
-        <a href="/">stringtrax.com</a>
-    </footer>
-   
-</body>
-
+        </header>
+        {{content}}
+        <footer>
+            <a href="/">stringtrax.com</a>
+        </footer>
+    </body>
 </html>
