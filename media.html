@@ -8,21 +8,21 @@ audio:
     spotify: "602fNu8uLA7DFX9ylVH0si"
     youtube: "SMIg7QTq4-U"
     apple:   "schindlers-list-feat-marshall-griffith-single/1564704068"
-    mp3:     "Schindler's List.mp3"
+    mp3:     "schindlers-list"
     
   - artist:  "Emily & Ivory"
     track:   "I Waste My Time"
     spotify: "0gm0wbBvS0SjmedJdqaxyX"
     youtube: "IF7oamq4gEQ"
     apple:   "i-waste-my-time/1538223130?i=1538223148"
-    mp3:     "Waste My Time clip.mp3"
+    mp3:     "waste-my-time"
 
   - artist:  "Emily & Ivory"
     track:   "Why Do I Trace My Troubles Back to You"
     spotify: "38jm2hLV6jD3jXJMPpymIM"
     youtube: "plQepYqPVV8"
     apple:   "why-do-i-trace-my-troubles-back-to-you/1538223130?i=1538223144"
-    mp3:     "Trace My Troubles Clip.mp3"
+    mp3:     "trace-my-troubles"
 
 video:
   "Foo7PwkjR5I": "Hark the Herald Angels Sing"
@@ -38,7 +38,7 @@ video:
     <div id="audio">
         {% for song in page.audio %}
             <div class="audio-player-container">
-                <audio src="{{site.baseurl}}/mp3/{{song.mp3}}" preload="metadata" loop></audio>
+                <audio src="{{site.baseurl}}/mp3/{{song.mp3}}.mp3" preload="metadata" loop></audio>
                 <img class="albumCover" src="https://i.ytimg.com/vi/{{song.youtube}}/mqdefault.jpg">
                 <button class="play-icon"></button>
                 <div id="text">

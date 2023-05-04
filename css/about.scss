@@ -1,7 +1,14 @@
 ---
 ---
-#about-info {
-  
+
+.inset
+{
+    max-width: 900px;
+    margin: auto;
+}
+
+#about-info
+{
     background-image:url("{{site.baseurl}}/img/concertbg.jpeg");
     background-position: 15% 35%;
     background-size: cover;
@@ -9,69 +16,69 @@
     min-height: 840px;
     box-sizing: border-box;
     padding:  80px 20px;
-    color: white;
+    color: #d6d6d6;
     display: flex;
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 3000px rgba(88, 83, 88, 0.267) inset;
-    
+
+    h2
+    {
+        font-size: 80px;
+        line-height: 1.2em;
+        text-transform: uppercase;
+        margin: 0;
+     }
+     
+     h3
+     {
+         font-size: 28px;
+     }
+     
+     p
+     {
+         font-size: 19px;
+         line-height: 1.6em;
+         text-shadow: 0px 2px 5px black, 0px 2px 5px black, 0px 2px 3px black, 0px 1px 2px black;
+     }
+
 }
 
-#div-text {
-    max-width: 900px;
-    margin: auto;
-}
-
-#div-text h2 {
- 
-   font-size: 80px;
-   line-height: 1.2em;
-   text-transform: uppercase;
-   margin: 0;
-   opacity: 0.8;
-  
-}
-
-#div-text h3 {
-    font-size: 28px;
-    opacity: 0.8;
-}
-
-#div-text p {
-    font-size: 22px;
-    opacity: 0.8;
-}
-
-#testimonials {
-   
+#testimonials
+{
     min-height: 996px;
     background-color: rgb(247, 247, 247);
     padding: 20px;
+
+    h2
+    {
+        font-size: 80px;
+        color: rgb(179,138,76);
+        text-transform: uppercase;
+        padding-top: 80px;
+        padding-bottom:0;
+        margin: 0 0 50px 0;
+    }
+    
+    blockquote
+    {
+        margin: 0 0 60px 0;
+        font-family: Open Sans;
+    }
+
+    p
+    {
+        font-size: 22px;
+    }
+    
 }
 
-#testimonial-text {
-    max-width: 900px;
-    margin: auto;
-}
-
-#testimonial-text h2 {
-    font-size: 80px;
-    color: rgb(179,138,76);
-    text-transform: uppercase;
-    padding-top: 80px;
-    padding-bottom:0;
-    margin: 0;
-}
-
-#testimonial-text p {
-    font-size: 22px;
-
-}
 
 
-
-@media(max-width: 690px) {
-    #about-info {
+@media(max-width: 690px)
+{
+    #about-info
+    {
         padding-top: 300px;
         background-position: center top;
         background-size: contain;
@@ -79,9 +86,8 @@
         background-color: black;
     }
 
-    #testimonial-text h2, #about-info h2 {
+    #testimonials h2, #about-info h2
+    {
         font-size: 50px;
     }
-
-
 }

@@ -5,9 +5,13 @@
 @import url("./fonts.css");
 
 body {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Open Sans', Georgia, sans-serif;
     size: 20px;
     margin: 0;
+}
+h1, h2, h3, h4, h5, h6
+{
+  font-family: 'Oswald', sans-serif;
 }
 
 /*Nav Elements (all pages)*/
