@@ -51,13 +51,14 @@ nav
   text-decoration: none;
   letter-spacing: 2px;
   transition: all 0.4s;
-}
-.button-ish:hover
-{
-  background: #4c3c32;
-  color: #efefef;
-}
 
+  &:hover
+  {
+    background: #4c3c32;
+    color: #efefef;
+  }
+  
+}
 
 .mobile-nav ul {
     transition: none;
