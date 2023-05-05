@@ -132,9 +132,6 @@ input[type='checkbox'] {
 
 
 @media(max-width: 690px) {    
-  h1 {
-    padding-top: 10px;
-}
 
 header {
     position: relative;
@@ -144,7 +141,8 @@ header {
 }
 
 header h1 {
-    height: 100px;
+    padding-top: 12px;
+    height: 10px;
     font-size: 30px;
 }
 
@@ -215,6 +213,10 @@ header h1 {
       
       input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
         transform: rotate(-45deg);
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: lighter;
       }
       
     }
