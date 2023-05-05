@@ -9,6 +9,7 @@ audio:
     youtube: "SMIg7QTq4-U"
     apple:   "schindlers-list-feat-marshall-griffith-single/1564704068"
     mp3:     "schindlers-list"
+    art:     "Schindler's List Cover Art.png" 
     
   - artist:  "Emily & Ivory"
     track:   "I Waste My Time"
@@ -16,6 +17,7 @@ audio:
     youtube: "IF7oamq4gEQ"
     apple:   "i-waste-my-time/1538223130?i=1538223148"
     mp3:     "waste-my-time"
+    art:     "Emily and Ivory Album Cover.jpg"
 
   - artist:  "Emily & Ivory"
     track:   "Why Do I Trace My Troubles Back to You"
@@ -23,6 +25,7 @@ audio:
     youtube: "plQepYqPVV8"
     apple:   "why-do-i-trace-my-troubles-back-to-you/1538223130?i=1538223144"
     mp3:     "trace-my-troubles"
+    art:     "Emily and Ivory Album Cover.jpg"
 
 video:
   "Foo7PwkjR5I": "Hark the Herald Angels Sing"
@@ -39,7 +42,7 @@ video:
         {% for song in page.audio %}
             <div class="audio-player-container">
                 <audio src="{{site.baseurl}}/mp3/{{song.mp3}}.mp3" preload="metadata" loop></audio>
-                <img class="albumCover" src="https://i.ytimg.com/vi/{{song.youtube}}/mqdefault.jpg">
+                <img class="albumCover" src="{{site.baseurl}}/img/{{song.art}}">
                 <button class="play-icon"></button>
                 <div id="text">
                     <h2>{{song.artist}}</h2>
