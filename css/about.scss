@@ -75,7 +75,7 @@
 
 
 
-@media(max-width: 690px)
+@media(max-width: 900px)
 {
     #about-info
     {
@@ -90,4 +90,9 @@
     {
         font-size: 50px;
     }
+
+    #About p, cite {
+        font-size: 15px;
+    }
+
 }
