@@ -108,3 +108,20 @@ form {
     }
 
 }
+
+#thanks
+{
+    display:none;
+}
+body.done
+{
+    form
+    {
+        display:none;
+    }
+    #thanks
+    {
+        display:block;
+        margin-top: 200px;
+    }
+}
