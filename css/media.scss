@@ -307,7 +307,7 @@ iframe {
         "links links";
         justify-content: center;
         gap: 0;
-        
+        margin: 20px;
         
     }
     .albumCover {
@@ -330,6 +330,7 @@ iframe {
     .play-icon {
         justify-self: center;
         margin-top: 0;
+        width: 85px;
     }
 
     #text {
@@ -339,6 +340,18 @@ iframe {
     #links {
         display: flex;
         justify-content: space-evenly;
+    }
+
+    .video-gallery-container .play-button {
+        top:30%;
+    }
+
+    .video-gallery-container {
+        margin-top: 50px;
+    }
+
+    #audio {
+        padding: 0 35px;
     }
 }
 
