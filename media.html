@@ -48,18 +48,16 @@ video:
             Make(inDOMID, inYTID, inAttr)
             {
                 let _player = false;
-                const _make =()=>_player = new YT.Player( inDOMID, {videoId: inYTID, playerVars: { modestbranding: true, rel: 0 }});
+                const _make =()=> _player = new YT.Player( inDOMID, {videoId: inYTID, playerVars: { modestbranding: true, rel: 0 }});
+                const _show =(inID)=> document.querySelectorAll(`[${inAttr}]`).forEach(e=>e.setAttribute("data-active", e.getAttribute(inAttr) == inID));
                 const toggle =(inYTID)=>
                 {
                     if(!inYTID){ _player.pauseVideo(); }
-                    else if(_player.playerInfo.playerState == 2){ _player.playVideo(); }
-                    else if(inYTID != _player.playerInfo.videoData.video_id)
-                    {
-                        _player.loadVideoById(inYTID);
-                        document.querySelectorAll(`[${inAttr}]`).forEach(e=>e.setAttribute("data-active", e.getAttribute(inAttr) == inYTID));
-                    }
+                    else if(inYTID != _player.playerInfo.videoData.video_id){ _player.loadVideoById(inYTID); _show(inYTID); }
+                    else if(_player.playerInfo.playerState == 2 || _player.playerInfo.playerState == 5){ _player.playVideo(); }
                 }
                 window?.YT?.loaded ? _make() : window.onYouTubeIframeAPIReady = _make;
+                _show(inYTID);
                 document.body.addEventListener("click", event => toggle( event.composedPath().find(step=>step.hasAttribute?.(inAttr))?.getAttribute?.(inAttr) ));
                 this.List[inDOMID] = toggle;
                 return toggle;
