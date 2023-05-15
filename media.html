@@ -38,6 +38,36 @@ video:
 
 ---
 <main>
+
+    <script defer src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const YouTubePlayer =
+        {
+            List: {},
+            /** @type {(inDOMID:string, inYTID:string, inAttr:string)=>(inYTID?:string)=>void} */
+            Make(inDOMID, inYTID, inAttr)
+            {
+                let _player = false;
+                const _make =()=>_player = new YT.Player( inDOMID, {videoId: inYTID, playerVars: { modestbranding: true, rel: 0 }});
+                const toggle =(inYTID)=>
+                {
+                    if(!inYTID){ _player.pauseVideo(); }
+                    else if(_player.playerInfo.playerState == 2){ _player.playVideo(); }
+                    else if(inYTID != _player.playerInfo.videoData.video_id)
+                    {
+                        _player.loadVideoById(inYTID);
+                        document.querySelectorAll(`[${inAttr}]`).forEach(e=>e.setAttribute("data-active", e.getAttribute(inAttr) == inYTID));
+                    }
+                }
+                window?.YT?.loaded ? _make() : window.onYouTubeIframeAPIReady = _make;
+                document.body.addEventListener("click", event => toggle( event.composedPath().find(step=>step.hasAttribute?.(inAttr))?.getAttribute?.(inAttr) ));
+                this.List[inDOMID] = toggle;
+                return toggle;
+            },
+            Kill(){ Object.values(this.List).forEach(p=>p()); }
+        };
+    </script>
+
     <div id="audio">
         {% for song in page.audio %}
             <div class="audio-player-container">
@@ -65,7 +95,9 @@ video:
             {% for YTID in page.video %}
                 {% if forloop.first %}
                     <div id="frame-holder">
-                        <iframe src="https://www.youtube.com/embed/{{ YTID[0] }}?rel=0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <div id="yt"></div>
+                        <!--
+                        <iframe src="https://www.youtube.com/embed/{{ YTID[0] }}?rel=0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>-->
                     </div>
                     <h3 class="video-title">{{ YTID[1] }}</h3>
                     {% break %}
@@ -73,8 +105,8 @@ video:
             {% endfor %}
             <div id="thumbs">
                 {% for YTID in page.video %}
-                    <div class="video">
-                        <img class="thumbnail" src="https://i.ytimg.com/vi/{{ YTID[0] }}/mqdefault.jpg" data-id="{{ YTID[0] }}" data-title="{{ YTID[1] }}" />
+                    <div class="video" data-video="{{ YTID[0] }}">
+                        <img class="thumbnail" src="https://i.ytimg.com/vi/{{ YTID[0] }}/mqdefault.jpg" data-title="{{ YTID[1] }}" />
                         <div class="play-button"><img src="{{site.baseurl}}/img/Playbutton.png" alt=""></div>
                         <p>{{ YTID[1] }}</p>
                     </div>
@@ -82,26 +114,11 @@ video:
             </div>
         </div>
     </div>
+    <script>
+        YouTubePlayer.Make("yt", "Foo7PwkjR5I", "data-video");
+    </script>
 
 </main>
 
-<script>
-var scriptUrl = 'https:\/\/www.youtube.com\/s\/player\/50cf60f0\/www-widgetapi.vflset\/www-widgetapi.js';window['yt_embedsEnableHouseBrandAndYtCoexistence'] =  true ;try{var ttPolicy=window.trustedTypes.createPolicy("youtube-widget-api",{createScriptURL:function(x){return x}});scriptUrl=ttPolicy.createScriptURL(scriptUrl)}catch(e){}var YT;if(!window["YT"])YT={loading:0,loaded:0};var YTConfig;if(!window["YTConfig"])YTConfig={"host":"https://www.youtube.com"};
-if(!YT.loading){YT.loading=1;(function(){var l=[];YT.ready=function(f){if(YT.loaded)f();else l.push(f)};window.onYTReady=function(){YT.loaded=1;for(var i=0;i<l.length;i++)try{l[i]()}catch(e$0){}};YT.setConfig=function(c){for(var k in c)if(c.hasOwnProperty(k))YTConfig[k]=c[k]};var a=document.createElement("script");a.type="text/javascript";a.id="www-widgetapi-script";a.src=scriptUrl;a.async=true;var c=document.currentScript;if(c){var n=c.nonce||c.getAttribute("nonce");if(n)a.setAttribute("nonce",n)}var b=
-document.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)})()};
-
-window.onYouTubeIframeAPIReady =()=> console.log("ZOMG");
-</script>
-<script type="module" crossorigin="use-credentials">
-    /*
-    let tagNew, tagOld;
-    tagNew = document.createElement('script');
-    tagNew.src = "https://www.youtube.com/iframe_api";
-    tagOld = document.getElementsByTagName('script')[0];
-    tagOld.parentNode.insertBefore(tagNew, tagOld);
-    window.onYouTubeIframeAPIReady =()=> console.log("ZOMG");
-    */
-</script>
 
 <script src="{{site.baseurl}}/js/player-audio.js" type="module"></script>
-<script src="{{site.baseurl}}/js/player-video.js" type="module"></script>

@@ -229,8 +229,11 @@ h3.video-title {
 
 .video-gallery-container .video:hover .play-button {
     opacity: 1;
-
 }
+.video-gallery-container .video[data-active='true'] .play-button {
+    opacity: 1;
+}
+
 .video-gallery-container .play-button {
     position: absolute;
     top: 40%;
