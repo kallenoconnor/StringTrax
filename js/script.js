@@ -1,3 +1,6 @@
+//rough check for desktop devices
+document.body.setAttribute("data-desktop", (window?.ontouchstart || navigator.maxTouchPoints) ? "false" : "true");
+
 //intersection observer for animatin text at certain page points
 const observerCheckHit = (/**@type {IntersectionObserverEntry}*/element )=>
 {

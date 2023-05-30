@@ -38,6 +38,65 @@ video:
 
 ---
 <main>
+
+    <script defer src="https://www.youtube.com/iframe_api"></script>
+    <script>
+
+        const YouTubePlayer =
+        {
+            /**
+             * Controls the playback of a YT video. If an id is passed, will play the video with that id. With no arguments, will pause the video.
+             * @typedef {(inYTID?:string)=>void} Controls */
+
+            /**
+             * When the video changes, this handler will be called for each thumbnail element; with the 2nd argument being if the element is now active.
+             * @typedef {(element:HTMLElement, on:boolean)=>void} ChangeHandler */
+
+            /**
+             * List of all player controls by DOM id
+             * @type {Record<string, Controls>}
+            */
+            List: {},
+
+            /**
+             * Creates a new YouTube player
+             * @param {string} inDOMID The DOM id of the element to become the player
+             * @param {string} inYTID The id of the YouTube video to start with
+             * @param {string} inAttr Elements with this attribute are assumed to have YouTube video id for the attribute value; clicking on them will play the video with this id.
+             * @param {ChangeHandler} inChangeHandler
+             * @returns {Controls}
+             */
+            Make(inDOMID, inYTID, inAttr, inChangeHandler)
+            {
+                let _player = false;
+                const _make =()=> _player = new YT.Player( inDOMID, {videoId: inYTID, playerVars: { modestbranding: true, rel: 0 }});
+                const _show =(inID)=> document.querySelectorAll(`[${inAttr}]`).forEach(e=>
+                {
+                    const match = e.getAttribute(inAttr) == inID;
+                    e.setAttribute("data-active", match);
+                    inChangeHandler(e, match);
+                });
+                /** @type {Controls} */
+                const toggle =(inYTID)=>
+                {
+                    if(!inYTID){ _player.pauseVideo(); }
+                    else if(inYTID != _player.playerInfo.videoData.video_id){ _player.loadVideoById(inYTID); _show(inYTID); }
+                    else if(_player.playerInfo.playerState == 2 || _player.playerInfo.playerState == 5){ _player.playVideo(); }
+                }
+                const handler = event => toggle( event.composedPath().find(step=>step.hasAttribute?.(inAttr))?.getAttribute?.(inAttr) )
+
+                window?.YT?.loaded ? _make() : window.onYouTubeIframeAPIReady = _make;
+                _show(inYTID);
+                document.body.addEventListener("click", handler);
+                this.List[inDOMID] = toggle;
+                return toggle;
+            },
+            
+            /** stops all players */
+            Halt(){ Object.values(this.List).forEach(p=>p()); }
+        };
+    </script>
+
     <div id="audio">
         {% for song in page.audio %}
             <div class="audio-player-container">
@@ -65,7 +124,9 @@ video:
             {% for YTID in page.video %}
                 {% if forloop.first %}
                     <div id="frame-holder">
-                        <iframe src="https://www.youtube.com/embed/{{ YTID[0] }}?rel=0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <div id="yt"></div>
+                        <!--
+                        <iframe src="https://www.youtube.com/embed/{{ YTID[0] }}?rel=0" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>-->
                     </div>
                     <h3 class="video-title">{{ YTID[1] }}</h3>
                     {% break %}
@@ -73,8 +134,8 @@ video:
             {% endfor %}
             <div id="thumbs">
                 {% for YTID in page.video %}
-                    <div class="video">
-                        <img class="thumbnail" src="https://i.ytimg.com/vi/{{ YTID[0] }}/mqdefault.jpg" data-id="{{ YTID[0] }}" data-title="{{ YTID[1] }}" />
+                    <div class="video" data-video="{{ YTID[0] }}" data-title="{{ YTID[1] }}">
+                        <img class="thumbnail" src="https://i.ytimg.com/vi/{{ YTID[0] }}/mqdefault.jpg" data-title="{{ YTID[1] }}" />
                         <div class="play-button"><img src="{{site.baseurl}}/img/Playbutton.png" alt=""></div>
                         <p>{{ YTID[1] }}</p>
                     </div>
@@ -82,8 +143,11 @@ video:
             </div>
         </div>
     </div>
+    <script>
+        YouTubePlayer.Make("yt", "Foo7PwkjR5I", "data-video", (element, on)=> on && (document.querySelector(".video-title").innerHTML = element.getAttribute("data-title") || ""));
+    </script>
 
 </main>
 
+
 <script src="{{site.baseurl}}/js/player-audio.js" type="module"></script>
-<script src="{{site.baseurl}}/js/player-video.js" type="module"></script>
