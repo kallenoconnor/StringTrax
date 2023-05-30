@@ -305,22 +305,22 @@ input[type="range"]:active::-ms-thumb {
             overflow: scroll visible;
             width: 100%;
             gap: 10px;
-    
+        
             .video
             {
                 position: relative;
-    
+        
                 .thumbnail
                 {
                     height: 160px;
                     cursor: pointer;
-    
+        
                     @media(max-width: 720px)
                     {
                         height: 90px;
                     }
                 }
-    
+        
                 .play-button
                 {
                     position: absolute;
@@ -330,7 +330,7 @@ input[type="range"]:active::-ms-thumb {
                     pointer-events: none;
                     opacity: 0;
                     transition: opacity 400ms ease;
-    
+        
                     img
                     {
                         height: 50px;
@@ -345,20 +345,20 @@ input[type="range"]:active::-ms-thumb {
                         top:30%;
                     }
                 }
-    
-    
-                &:hover .play-button,
-                &[data-active='true'] .play-button 
-                {
-                    opacity: 1;
-                }
-    
+        
                 p
                 {
                     margin: 0 0 5px 0;
                 }
-    
+        
             }
         }
+        
     }
+}
+
+[data-desktop='true'] #thumbs .video:hover .play-button,
+#thumbs .video[data-active='true'] .play-button 
+{
+    opacity: 1 !important;
 }
