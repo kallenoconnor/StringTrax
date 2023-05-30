@@ -61,9 +61,12 @@ video:
                     else if(inYTID != _player.playerInfo.videoData.video_id){ _player.loadVideoById(inYTID); _show(inYTID); }
                     else if(_player.playerInfo.playerState == 2 || _player.playerInfo.playerState == 5){ _player.playVideo(); }
                 }
+                const handler = event => toggle( event.composedPath().find(step=>step.hasAttribute?.(inAttr))?.getAttribute?.(inAttr) )
+                
                 window?.YT?.loaded ? _make() : window.onYouTubeIframeAPIReady = _make;
                 _show(inYTID);
-                document.body.addEventListener("click", event => toggle( event.composedPath().find(step=>step.hasAttribute?.(inAttr))?.getAttribute?.(inAttr) ));
+                document.body.addEventListener("click", handler);
+                document.body.addEventListener("touchend", handler);
                 this.List[inDOMID] = toggle;
                 return toggle;
             },
