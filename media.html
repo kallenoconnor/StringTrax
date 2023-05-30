@@ -44,12 +44,17 @@ video:
         const YouTubePlayer =
         {
             List: {},
-            /** @type {(inDOMID:string, inYTID:string, inAttr:string)=>(inYTID?:string)=>void} */
-            Make(inDOMID, inYTID, inAttr)
+            /** @type {(inDOMID:string, inYTID:string, inAttr:string, inChangeHandler(e:HTMLElement))=>(inYTID?:string)=>void} */
+            Make(inDOMID, inYTID, inAttr, inChangeHandler)
             {
                 let _player = false;
                 const _make =()=> _player = new YT.Player( inDOMID, {videoId: inYTID, playerVars: { modestbranding: true, rel: 0 }});
-                const _show =(inID)=> document.querySelectorAll(`[${inAttr}]`).forEach(e=>e.setAttribute("data-active", e.getAttribute(inAttr) == inID));
+                const _show =(inID)=> document.querySelectorAll(`[${inAttr}]`).forEach(e=>
+                {
+                    const match = e.getAttribute(inAttr) == inID;
+                    e.setAttribute("data-active", match);
+                    match && inChangeHandler(e);
+                });
                 const toggle =(inYTID)=>
                 {
                     if(!inYTID){ _player.pauseVideo(); }
@@ -103,7 +108,7 @@ video:
             {% endfor %}
             <div id="thumbs">
                 {% for YTID in page.video %}
-                    <div class="video" data-video="{{ YTID[0] }}">
+                    <div class="video" data-video="{{ YTID[0] }}" data-title="{{ YTID[1] }}">
                         <img class="thumbnail" src="https://i.ytimg.com/vi/{{ YTID[0] }}/mqdefault.jpg" data-title="{{ YTID[1] }}" />
                         <div class="play-button"><img src="{{site.baseurl}}/img/Playbutton.png" alt=""></div>
                         <p>{{ YTID[1] }}</p>
@@ -113,7 +118,7 @@ video:
         </div>
     </div>
     <script>
-        YouTubePlayer.Make("yt", "Foo7PwkjR5I", "data-video");
+        YouTubePlayer.Make("yt", "Foo7PwkjR5I", "data-video", element=>document.querySelector(".video-title").innerHTML = element.getAttribute("data-title") || "");
     </script>
 
 </main>
