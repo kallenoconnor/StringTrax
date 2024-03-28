@@ -12,20 +12,3 @@ const observerCheckHit = (/**@type {IntersectionObserverEntry}*/element )=>
 
 const observer = new IntersectionObserver( (e)=>e.forEach(observerCheckHit), { root: null, rootMargin: '0px', threshold: 0.1 } );
 document.querySelectorAll("[data-anim]").forEach(anim=>observer.observe(anim));
-
-//Form manipulation (prevent default redirect)
-const form = document.getElementById("contactForm");
-form?.addEventListener("submit", e=>
-{
-    e.preventDefault();
-
-    //Get form data
-    var data= new FormData(form);
-    //Init fetch post
-    fetch(form.getAttribute("action"), {
-        method: "POST",
-        body: data
-    })
-    //Server Response
-    .then(()=>document.body.setAttribute("class", "done"))
-});

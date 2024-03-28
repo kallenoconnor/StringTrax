@@ -34,4 +34,17 @@ sheet: "/css/contact.css"
             <button type="submit">Submit</button>
         </div>
     </form>
+    <script>
+        const form = document.getElementById("contactForm");
+        form.addEventListener("submit", async(e)=>
+        {
+            e.preventDefault();
+            await fetch(form.getAttribute("action"), {
+                headers: {"Accept": "application/json"},
+                method: "POST",
+                body: new FormData(form)
+            });
+            document.body.setAttribute("class", "done");
+        });
+    </script>
 </div>
