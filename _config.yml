@@ -6,4 +6,9 @@ defaults:
     scope:
       path: ""
     values:
-      layout: "default"
+      layout: default
+      title: String Trax
+      image: /img/Social.png
+      description: Professional violin and vocal tracks
+      keywords: |
+        Kallen OConnor, Recording, Violin, Vocal
