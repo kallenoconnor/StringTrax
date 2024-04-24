@@ -27,7 +27,7 @@ function Animation(inElement)
 
 /** @typedef {{Play:()=>void, Stop:()=>void }} CyclerControls */
 /** @typedef {(inHandler:()=>void)=>CyclerControls} CycleConstructor */
-/** @type {CycleConstructor} */
+/** @type {CycleConstructor} Repeatedly call a function. Returns controls to "play" and "stop" to polling */
 function Cycle(inHandler) {
 
     /** @type {false|number} */
@@ -71,6 +71,10 @@ const Util =
     }   
 }
 
+/** @type {((animate?:boolean)=>void)[]} list of stop functions for each player*/
+const AudioPlayers = [];
+const StopAudioPlayers =()=> AudioPlayers.forEach(stopFunction=>stopFunction(false))
+
 /** @type {(rootElement:HTMLElement)=>void} */
 function initPlayer(rootElement) {
 
@@ -97,25 +101,31 @@ function initPlayer(rootElement) {
             const bufferedAmount = Math.floor(domSong.buffered.end(domSong.buffered.length - 1));
             rootElement.style.setProperty('--buffered-width', Util.FormatPercent(bufferedAmount, domSeek.max));
         }
+        if(isNaN(domSong.duration))
+        {
+            console.log("nan duration", domSong);
+        }
         domSize.textContent = Util.FormatTime(domSong.duration);
         domSeek.max = Math.floor(domSong.duration).toString();
     };
 
     // state stuff
     let Playing = false;
+    const Stop =()=>
+    {
+        domSong.pause();
+        Playing && anim.Stop();
+        loop.Stop();
+        Playing = false;
+    };
+    AudioPlayers.push(Stop);
     const Play =()=>
     {
+        StopAudioPlayers();
         domSong.play();
         anim.Play();
         loop.Play();
         Playing = true;
-    };
-    const Stop =()=>
-    {
-        domSong.pause();
-        anim.Stop();
-        loop.Stop();
-        Playing = false;
     };
 
     // while the slide moves
@@ -131,6 +141,7 @@ function initPlayer(rootElement) {
     domSeek.addEventListener('change', () =>
     {
         domSong.currentTime = parseInt(domSeek.value);
+        !Playing && Play();
     });
 
     // when the play/pause button is pressed
