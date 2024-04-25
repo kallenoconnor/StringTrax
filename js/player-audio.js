@@ -1,12 +1,16 @@
 // @ts-check
+
+
+/**
+ * @typedef {import("./player-manager.js").PlayerManager} PlayerManager
+ */
+
 /** Implementation of the presentation of the audio player */
 import lottieWeb from 'https://cdn.skypack.dev/lottie-web';
 
 /** @typedef {()=>void} AnimationAction */
-/** @typedef {{Init:AnimationAction, Play:AnimationAction, Stop:AnimationAction}} AnimationControls */
-/** @typedef {(inElement:HTMLElement)=>AnimationControls} AnimationConstructor */
 
-/** @type {AnimationConstructor} */
+/** @type {(inElement:HTMLElement)=>{Init:AnimationAction, Play:AnimationAction, Stop:AnimationAction}} */
 function Animation(inElement)
 {
     const Animation = lottieWeb.loadAnimation({
@@ -25,33 +29,6 @@ function Animation(inElement)
     };
 }
 
-/** @typedef {{Play:()=>void, Stop:()=>void }} CyclerControls */
-/** @typedef {(inHandler:()=>void)=>CyclerControls} CycleConstructor */
-/** @type {CycleConstructor} */
-function Cycle(inHandler) {
-
-    /** @type {false|number} */
-    let Live = false;
-    const _run= ()=>
-    {
-        inHandler();
-        Live = requestAnimationFrame(_run);
-    };
-    const Play =()=>
-    {
-        if(Live){ return; }
-        Live = requestAnimationFrame(_run);
-    };
-    const Stop =()=>
-    {
-        if(Live === false){ return; }
-        cancelAnimationFrame(Live);
-        Live = false;
-    };
-
-    return { Play, Stop }; 
-};
-
 const Util =
 {
     /** @type {(inSeconds:number|string)=>string} */
@@ -68,11 +45,37 @@ const Util =
         inPart  = typeof inPart  == "number" ? inPart  : parseFloat(inPart);
         inWhole = typeof inWhole == "number" ? inWhole : parseFloat(inWhole);
         return `${(inPart/inWhole) * 100}%`;
-    }   
+    },
+    /** @type {(inHandler:()=>void)=>{Play:AnimationAction, Stop:AnimationAction }} Repeatedly call a function. Returns controls to "play" and "stop" to polling */
+    Cycle(inHandler) {
+        /** @type {false|number} */
+        let Live = false;
+        const _run= ()=>
+        {
+            inHandler();
+            Live = requestAnimationFrame(_run);
+        };
+        const Play =()=>
+        {
+            if(Live){ return; }
+            Live = requestAnimationFrame(_run);
+        };
+        const Stop =()=>
+        {
+            if(Live === false){ return; }
+            cancelAnimationFrame(Live);
+            Live = false;
+        };
+
+        return { Play, Stop }; 
+    }
+    
 }
 
-/** @type {(rootElement:HTMLElement)=>void} */
-function initPlayer(rootElement) {
+/** @typedef {(rootElement:HTMLElement, playerManager:PlayerManager)=>void} AudioPlayer */
+
+/** @type {AudioPlayer} */
+export default function CreateAudioPlayer(rootElement, playerManager) {
 
     /** @type {null|HTMLAudioElement} */ const domSong = rootElement.querySelector('audio');
     /** @type {null|HTMLInputElement} */ const domSeek = rootElement.querySelector('.seek-slider');
@@ -80,9 +83,9 @@ function initPlayer(rootElement) {
     /** @type {null|HTMLElement}      */ const domTime = rootElement.querySelector('.current-time');
     /** @type {null|HTMLElement}      */ const domSize = rootElement.querySelector('.duration');
     
-    if(!domSong || !domPlay || !domSeek || !domTime || !domSize ){ return; }
+    if(!domSong || !domPlay || !domSeek || !domTime || !domSize ){ console.warn("missing audio player elements"); return; }
 
-    const loop = Cycle(()=>
+    const pollProgressBar = Util.Cycle(()=>
     {
         const time = Math.floor(domSong.currentTime);
         domSeek.value = time.toString();
@@ -103,19 +106,20 @@ function initPlayer(rootElement) {
 
     // state stuff
     let Playing = false;
-    const Play =()=>
-    {
-        domSong.play();
-        anim.Play();
-        loop.Play();
-        Playing = true;
-    };
     const Stop =()=>
     {
         domSong.pause();
-        anim.Stop();
-        loop.Stop();
+        Playing && anim.Stop();
+        pollProgressBar.Stop();
         Playing = false;
+    };
+    const Play =()=>
+    {
+        playerManager.StopAll(Stop);
+        domSong.play();
+        anim.Play();
+        pollProgressBar.Play();
+        Playing = true;
     };
 
     // while the slide moves
@@ -131,6 +135,7 @@ function initPlayer(rootElement) {
     domSeek.addEventListener('change', () =>
     {
         domSong.currentTime = parseInt(domSeek.value);
+        !Playing && Play();
     });
 
     // when the play/pause button is pressed
@@ -144,9 +149,6 @@ function initPlayer(rootElement) {
     // setup the play button animation
     const anim = Animation(domPlay);
     anim.Init();
-}
 
-document.querySelectorAll('.audio-player-container').forEach((player)=>
-{
-    initPlayer( /** @type {HTMLElement}*/(player) );
-})
+    playerManager.Register(Stop);
+}
