@@ -67,167 +67,6 @@ video:
                 </div>
             </div>
         {% endfor %}
-        <script type="module">
-            // @ts-check
-            /** Implementation of the presentation of the audio player */
-            import lottieWeb from 'https://cdn.skypack.dev/lottie-web';
-            {
-
-                /** @typedef {()=>void} AnimationAction */
-                /** @typedef {{Init:AnimationAction, Play:AnimationAction, Stop:AnimationAction}} AnimationControls */
-                /** @typedef {(inElement:HTMLElement)=>AnimationControls} AnimationConstructor */
-
-                /** @type {AnimationConstructor} */
-                function Animation(inElement)
-                {
-                    const Animation = lottieWeb.loadAnimation({
-                        container: inElement,
-                        renderer: 'svg',
-                        autoplay: false,
-                        loop: false,
-                        name: "Play Animation",
-                        path: 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/pause/pause.json'
-                    });
-                    
-                    return {
-                        Init: ()=> Animation.goToAndStop(14, true),
-                        Play: ()=> Animation.playSegments([14, 27], true),
-                        Stop: ()=> Animation.playSegments([0, 14], true)
-                    };
-                }
-
-
-                const Util =
-                {
-                    /** @type {(inSeconds:number|string)=>string} */
-                    FormatTime(inSeconds)
-                    {
-                        inSeconds = typeof inSeconds == "number" ? inSeconds : parseFloat(inSeconds);
-                        const minutes = Math.floor(inSeconds / 60);
-                        const seconds = Math.floor(inSeconds % 60);
-                        return `${minutes}:${seconds<10?"0":""}${seconds}`;
-                    },
-                    /** @type {(inPart:number|string, inWhole:number|string)=>string} */
-                    FormatPercent(inPart, inWhole)
-                    {
-                        inPart  = typeof inPart  == "number" ? inPart  : parseFloat(inPart);
-                        inWhole = typeof inWhole == "number" ? inWhole : parseFloat(inWhole);
-                        return `${(inPart/inWhole) * 100}%`;
-                    },
-                    /** @type {(inHandler:()=>void)=>{Play:()=>void, Stop:()=>void }} Repeatedly call a function. Returns controls to "play" and "stop" to polling */
-                    Cycle(inHandler) {
-                        /** @type {false|number} */
-                        let Live = false;
-                        const _run= ()=>
-                        {
-                            inHandler();
-                            Live = requestAnimationFrame(_run);
-                        };
-                        const Play =()=>
-                        {
-                            if(Live){ return; }
-                            Live = requestAnimationFrame(_run);
-                        };
-                        const Stop =()=>
-                        {
-                            if(Live === false){ return; }
-                            cancelAnimationFrame(Live);
-                            Live = false;
-                        };
-
-                        return { Play, Stop }; 
-                    }
-                    
-                }
-
-                /** @type {((animate?:boolean)=>void)[]} list of stop functions for each player*/
-                const AudioPlayers = [];
-                globalThis.StopAudioPlayers =()=> AudioPlayers.forEach(stopFunction=>stopFunction(false))
-
-                /** @type {(rootElement:HTMLElement)=>void} */
-                function initPlayer(rootElement) {
-
-                    /** @type {null|HTMLAudioElement} */ const domSong = rootElement.querySelector('audio');
-                    /** @type {null|HTMLInputElement} */ const domSeek = rootElement.querySelector('.seek-slider');
-                    /** @type {null|HTMLElement}      */ const domPlay = rootElement.querySelector('.play-icon');
-                    /** @type {null|HTMLElement}      */ const domTime = rootElement.querySelector('.current-time');
-                    /** @type {null|HTMLElement}      */ const domSize = rootElement.querySelector('.duration');
-                    
-                    if(!domSong || !domPlay || !domSeek || !domTime || !domSize ){ return; }
-
-                    const loop = Util.Cycle(()=>
-                    {
-                        const time = Math.floor(domSong.currentTime);
-                        domSeek.value = time.toString();
-                        domTime.textContent = Util.FormatTime(time);
-                        rootElement.style.setProperty('--seek-before-width', Util.FormatPercent(time, domSeek.max));
-                    });
-
-                    const updateFileSize =()=>
-                    {
-                        if(domSong.buffered.length)
-                        {
-                            const bufferedAmount = Math.floor(domSong.buffered.end(domSong.buffered.length - 1));
-                            rootElement.style.setProperty('--buffered-width', Util.FormatPercent(bufferedAmount, domSeek.max));
-                        }
-                        domSize.textContent = Util.FormatTime(domSong.duration);
-                        domSeek.max = Math.floor(domSong.duration).toString();
-                    };
-
-                    // state stuff
-                    let Playing = false;
-                    const Stop =()=>
-                    {
-                        domSong.pause();
-                        Playing && anim.Stop();
-                        loop.Stop();
-                        Playing = false;
-                    };
-                    AudioPlayers.push(Stop);
-                    const Play =()=>
-                    {
-                        globalThis.StopAudioPlayers();
-                        domSong.play();
-                        anim.Play();
-                        loop.Play();
-                        Playing = true;
-                    };
-
-                    // while the slide moves
-                    domSeek.addEventListener('input', (e) =>
-                    {
-                        const target = /** @type {HTMLInputElement} */(e.target);
-                        rootElement.style.setProperty('--seek-before-width', Util.FormatPercent(target.value, target.max));
-                        domTime.textContent = Util.FormatTime(domSeek.value);
-                        Playing && Stop();
-                    });
-
-                    // when slider interaction has stopped
-                    domSeek.addEventListener('change', () =>
-                    {
-                        domSong.currentTime = parseInt(domSeek.value);
-                        !Playing && Play();
-                    });
-
-                    // when the play/pause button is pressed
-                    domPlay.addEventListener('click', ()=> Playing ? Stop() : Play());
-
-                    // periodically update loaded/duration numbers
-                    domSong.addEventListener('loadedmetadata', updateFileSize);
-                    domSong.addEventListener('progress', updateFileSize);
-                    updateFileSize();
-                    
-                    // setup the play button animation
-                    const anim = Animation(domPlay);
-                    anim.Init();
-                }
-
-                document.querySelectorAll('.audio-player-container').forEach((player)=>
-                {
-                    initPlayer( /** @type {HTMLElement}*/(player) );
-                });
-            }
-        </script>
     </div>
 
     <div id="video">
@@ -249,93 +88,33 @@ video:
                 {% endfor %}
             </div>
         </div>
-        <script defer src="https://www.youtube.com/iframe_api"></script>
-        <script type="module">
-{
-    /**
-     * Controls the playback of a YT video. If an id is passed, will play the video with that id. With no arguments, will pause the video.
-     * @typedef {(inYTID?:string)=>void} Controls */
-
-    /**
-     * When the video changes, this handler will be called for each thumbnail element; with the 2nd argument being if the element is now active.
-     * @typedef {(element:HTMLElement, on:boolean)=>void} ChangeHandler */
-
-    /**
-     * mock type for the youtube player
-     * @typedef { {playVideo:()=>void, loadVideoById:(id:string)=>void}, playerInfo:number} } YouTubePlayer */
-
-    /**
-     * List of all player controls by DOM id
-     * @type {Record<string, Controls>}
-    */
-    const List = {};
-
-    /**
-     * Creates a new YouTube player
-     * @param {string} inDOMID The DOM id of the element to become the player
-     * @param {string} inYTID The id of the YouTube video to start with
-     * @param {string} inAttr Elements with this attribute are assumed to have YouTube video id for the attribute value; clicking on them will play the video with this id.
-     * @param {ChangeHandler} inChangeHandler
-     * @returns {Controls}
-     */
-    function Make(inDOMID, inYTID, inAttr, inChangeHandler)
-    {
-        let _player;
-
-        const redrawThumbnails =(inID)=> document.querySelectorAll(`[${inAttr}]`).forEach((/** @type {HTMLElement}*/e)=>inChangeHandler(e, e.getAttribute(inAttr)==inID));
-
-        /** @type {Controls} */
-        const toggle =(inYTID)=>
-        {
-            if(!inYTID)
-            {
-                _player.pauseVideo();
-            }
-            else if(inYTID != _player.playerInfo.videoData.video_id)
-            {
-                _player.loadVideoById(inYTID); redrawThumbnails(inYTID);
-            }
-            else if(_player.playerInfo.playerState == 2 || _player.playerInfo.playerState == 5)
-            {
-                _player.playVideo();
-            }
-        }
-
-        globalThis.onYouTubeIframeAPIReady =()=> _player = new YT.Player( inDOMID, {videoId: inYTID, playerVars: { modestbranding: true, rel: 0 }});
-        globalThis?.YT?.loaded && globalThis.onYouTubeIframeAPIReady();
-
-        redrawThumbnails(inYTID);
-        document.body.addEventListener("click", (event)=>{
-            const match = /** @type {HTMLElement[]}*/(event.composedPath()).find((step)=>step.hasAttribute(inAttr));
-            toggle( match?.getAttribute(inAttr) || undefined )
-        });
-        this.List[inDOMID] = toggle;
-        return toggle;
-    };
-    
-
-    globalThis.StopVideoPlayers =()=>
-    {
-        Object.values(List).forEach(p=>p());
-    }
-
-    // {% comment %} note the way the 2nd argument is actually a liquid page variable {% endcomment %}
-    Make("yt", "{{first_video_id}}", "data-video", (element, match)=>
-    {
-        element.setAttribute("data-active", match.toString());
-        if(match)
-        {
-            const titleElement = document.querySelector(".video-title");
-            if(titleElement)
-            {
-                titleElement.innerHTML = element.getAttribute("data-title") || "";
-            }
-        }
-    });
-
-};
-
-        </script>
     </div>
+
+
+    <script defer src="https://www.youtube.com/iframe_api"></script>
+    <script type="module">
+        import CreateAudioPlayer from "/js/player-audio.js";
+        import CreateVideoPlayer from "/js/player-video.js";
+        import PlayerManager from "/js/player-manager.js";
+
+        // create audio players
+        document.querySelectorAll('.audio-player-container').forEach( element => CreateAudioPlayer(element, PlayerManager) );
+
+        // create video player {% comment %} note the way the 2nd argument is actually a liquid page variable {% endcomment %}
+        CreateVideoPlayer("yt", "{{first_video_id}}", "data-video", (element, match)=>
+            {
+                element.setAttribute("data-active", match.toString());
+                if(match)
+                {
+                    const titleElement = document.querySelector(".video-title");
+                    if(titleElement)
+                    {
+                        titleElement.innerHTML = element.getAttribute("data-title") || "";
+                    }
+                }
+            }
+        , PlayerManager);
+
+    </script>
 
 </main>

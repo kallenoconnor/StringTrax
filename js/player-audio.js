@@ -1,12 +1,16 @@
 // @ts-check
+
+
+/**
+ * @typedef {import("./player-manager.js").PlayerManager} PlayerManager
+ */
+
 /** Implementation of the presentation of the audio player */
 import lottieWeb from 'https://cdn.skypack.dev/lottie-web';
 
 /** @typedef {()=>void} AnimationAction */
-/** @typedef {{Init:AnimationAction, Play:AnimationAction, Stop:AnimationAction}} AnimationControls */
-/** @typedef {(inElement:HTMLElement)=>AnimationControls} AnimationConstructor */
 
-/** @type {AnimationConstructor} */
+/** @type {(inElement:HTMLElement)=>{Init:AnimationAction, Play:AnimationAction, Stop:AnimationAction}} */
 function Animation(inElement)
 {
     const Animation = lottieWeb.loadAnimation({
@@ -25,33 +29,6 @@ function Animation(inElement)
     };
 }
 
-/** @typedef {{Play:()=>void, Stop:()=>void }} CyclerControls */
-/** @typedef {(inHandler:()=>void)=>CyclerControls} CycleConstructor */
-/** @type {CycleConstructor} Repeatedly call a function. Returns controls to "play" and "stop" to polling */
-function Cycle(inHandler) {
-
-    /** @type {false|number} */
-    let Live = false;
-    const _run= ()=>
-    {
-        inHandler();
-        Live = requestAnimationFrame(_run);
-    };
-    const Play =()=>
-    {
-        if(Live){ return; }
-        Live = requestAnimationFrame(_run);
-    };
-    const Stop =()=>
-    {
-        if(Live === false){ return; }
-        cancelAnimationFrame(Live);
-        Live = false;
-    };
-
-    return { Play, Stop }; 
-};
-
 const Util =
 {
     /** @type {(inSeconds:number|string)=>string} */
@@ -68,15 +45,37 @@ const Util =
         inPart  = typeof inPart  == "number" ? inPart  : parseFloat(inPart);
         inWhole = typeof inWhole == "number" ? inWhole : parseFloat(inWhole);
         return `${(inPart/inWhole) * 100}%`;
-    }   
+    },
+    /** @type {(inHandler:()=>void)=>{Play:AnimationAction, Stop:AnimationAction }} Repeatedly call a function. Returns controls to "play" and "stop" to polling */
+    Cycle(inHandler) {
+        /** @type {false|number} */
+        let Live = false;
+        const _run= ()=>
+        {
+            inHandler();
+            Live = requestAnimationFrame(_run);
+        };
+        const Play =()=>
+        {
+            if(Live){ return; }
+            Live = requestAnimationFrame(_run);
+        };
+        const Stop =()=>
+        {
+            if(Live === false){ return; }
+            cancelAnimationFrame(Live);
+            Live = false;
+        };
+
+        return { Play, Stop }; 
+    }
+    
 }
 
-/** @type {((animate?:boolean)=>void)[]} list of stop functions for each player*/
-const AudioPlayers = [];
-const StopAudioPlayers =()=> AudioPlayers.forEach(stopFunction=>stopFunction(false))
+/** @typedef {(rootElement:HTMLElement, playerManager:PlayerManager)=>void} AudioPlayer */
 
-/** @type {(rootElement:HTMLElement)=>void} */
-function initPlayer(rootElement) {
+/** @type {AudioPlayer} */
+export default function CreateAudioPlayer(rootElement, playerManager) {
 
     /** @type {null|HTMLAudioElement} */ const domSong = rootElement.querySelector('audio');
     /** @type {null|HTMLInputElement} */ const domSeek = rootElement.querySelector('.seek-slider');
@@ -84,9 +83,9 @@ function initPlayer(rootElement) {
     /** @type {null|HTMLElement}      */ const domTime = rootElement.querySelector('.current-time');
     /** @type {null|HTMLElement}      */ const domSize = rootElement.querySelector('.duration');
     
-    if(!domSong || !domPlay || !domSeek || !domTime || !domSize ){ return; }
+    if(!domSong || !domPlay || !domSeek || !domTime || !domSize ){ console.warn("missing audio player elements"); return; }
 
-    const loop = Cycle(()=>
+    const pollProgressBar = Util.Cycle(()=>
     {
         const time = Math.floor(domSong.currentTime);
         domSeek.value = time.toString();
@@ -101,10 +100,6 @@ function initPlayer(rootElement) {
             const bufferedAmount = Math.floor(domSong.buffered.end(domSong.buffered.length - 1));
             rootElement.style.setProperty('--buffered-width', Util.FormatPercent(bufferedAmount, domSeek.max));
         }
-        if(isNaN(domSong.duration))
-        {
-            console.log("nan duration", domSong);
-        }
         domSize.textContent = Util.FormatTime(domSong.duration);
         domSeek.max = Math.floor(domSong.duration).toString();
     };
@@ -115,16 +110,15 @@ function initPlayer(rootElement) {
     {
         domSong.pause();
         Playing && anim.Stop();
-        loop.Stop();
+        pollProgressBar.Stop();
         Playing = false;
     };
-    AudioPlayers.push(Stop);
     const Play =()=>
     {
-        StopAudioPlayers();
+        playerManager.StopAll(Stop);
         domSong.play();
         anim.Play();
-        loop.Play();
+        pollProgressBar.Play();
         Playing = true;
     };
 
@@ -155,9 +149,6 @@ function initPlayer(rootElement) {
     // setup the play button animation
     const anim = Animation(domPlay);
     anim.Init();
-}
 
-document.querySelectorAll('.audio-player-container').forEach((player)=>
-{
-    initPlayer( /** @type {HTMLElement}*/(player) );
-})
+    playerManager.Register(Stop);
+}
